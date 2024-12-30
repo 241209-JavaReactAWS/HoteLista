@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "inboxes")
-public class Inbox {
+public class InboxItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int inboxId;
@@ -22,7 +22,7 @@ public class Inbox {
     private Date notificationTime;
     private String details;
 
-    public Inbox() {}
+    public InboxItem() {}
 
     public int getInboxId() { return inboxId; }
 

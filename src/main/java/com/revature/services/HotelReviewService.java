@@ -1,15 +1,15 @@
 package com.revature.services;
 
-import com.revature.daos.HotelReviewDao;
+import com.revature.daos.HotelReviewDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class HotelReviewService {
-    private final HotelReviewDao hotelReviewDao;
+    private final HotelReviewDAO hotelReviewDao;
 
     @Autowired
-    public HotelReviewService(HotelReviewDao hotelReviewDao) {
+    public HotelReviewService(HotelReviewDAO hotelReviewDao) {
         this.hotelReviewDao = hotelReviewDao;
     }
 
