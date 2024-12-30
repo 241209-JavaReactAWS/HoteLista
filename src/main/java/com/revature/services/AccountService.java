@@ -31,4 +31,9 @@ public class AccountService {
     public Account searchByEmail(String email){
         return accountDAO.findByEmail(email);
     }
+
+    /** Look up (Filter/Search) Accounts by role type: user or hotel owner */
+    public List<Account> searchByRole(boolean isOwner){
+        return accountDAO.findByRole(isOwner);
+    }
 }

@@ -12,16 +12,22 @@ public class Account {
     @Column(unique = true)
     private String email;
     private String password;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
     private boolean isOwner;
 
     public Account() {
 
     }
-    
-    public Account(int accountId, String email, String password, boolean isOwner) {
+
+    public Account(int accountId, String email, String password, String firstName, String lastName, String phoneNumber, boolean isOwner) {
         this.accountId = accountId;
         this.email = email;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
         this.isOwner = isOwner;
     }
 
@@ -47,6 +53,30 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public boolean getRole() {
