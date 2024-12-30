@@ -3,6 +3,8 @@ package com.revature.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.models.Account;
 import com.revature.services.AccountService;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/accounts")
@@ -26,14 +30,35 @@ public class AccountController {
     /** Defining endpoints */
 
     /** Create new Account handler */
-    @PostMapping
-    public Account createNewAccountHandler(@RequestBody Account account){
-        return accountService.createNewAccount(account);
+    @PostMapping("/register")
+    public ResponseEntity<Account> registerNewAccountHandler(@RequestBody Account account){
+        try {
+            Account acc = accountService.registerNewAccount(account);
+            return ResponseEntity.ok(acc);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
     }
 
-    /** Retrieving list of all Accounts handler */
+    /** Login Account handler */
+    @PostMapping("/login")
+    public ResponseEntity<Account> loginAccountHandler(@RequestBody Account account, HttpSession session){
+        try {
+            Account acc = accountService.loginAccount(account);
+            session.setAttribute("accountId", acc.getAccountId());
+            session.setAttribute("email", acc.getEmail());
+            session.setAttribute("isOwner", acc.getRole());
+            return ResponseEntity.ok(acc);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    /** Retrieving a list of all Accounts handler */
     @GetMapping
-    public List<Account> getAccountsHandler(){
-        return accountService.getAllAccounts();
+    public ResponseEntity<List<Account>> getAllAccountsHandler(){
+        return ResponseEntity.ok(accountService.getAllAccounts());
     }
 }
