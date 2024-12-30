@@ -5,8 +5,10 @@ import com.revature.models.Hotel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,8 +31,9 @@ public class HotelServices {
     }
 
     // TODO Get All Hotels
-    public List<Hotel> getAllHotel(){
-        return hotelDAO.findAll();
+    public Set<Hotel> getAllHotel(){
+        List<Hotel> potetionalHotels = hotelDAO.findAll();;
+        return new HashSet<Hotel>(potetionalHotels);
     }
     // TODO Update Hotel Information
     public Hotel updateHotelInfo(Hotel hotelToBeUpdated){
@@ -46,14 +49,16 @@ public class HotelServices {
         return possibleHotel;
     }
     // TODO Filter Hotels by Amenities
-    public List<Hotel> filterHotelsByAmenities(List<String> amenities){
-        List<Hotel> allHotels = hotelDAO.findAll();
-
-        List<Hotel> filteredHotels = allHotels.stream()
+    public Set<Hotel> filterHotelsByAmenities(Set<String> amenities){
+        Set<Hotel> allHotels = getAllHotel();
+        if(amenities.isEmpty()){
+            return allHotels;
+        }
+        Set<Hotel> filteredHotels = allHotels.stream()
                 .filter(hotel -> hotel.getHotelAmenities() != null
-                        && hotel.getHotelAmenities().contains(amenities)).collect(Collectors.toList());
+                        && hotel.getHotelAmenities().contains(amenities )).collect(Collectors.toSet());
         return  filteredHotels;
-
+//
     }
 
 }
