@@ -11,7 +11,7 @@ public class Hotel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int hotelID;
 
-    @Column(name = "hotel_name", nullable = false)
+    @Column(name = "hotel_name", nullable = false, unique = true)
     private String hotelName;
 
     @Column(name = "hotel_address", nullable = false)

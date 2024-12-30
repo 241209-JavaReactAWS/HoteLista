@@ -11,7 +11,6 @@ public enum Amenity {
     BREAKFAST,
     GAMEROOM,
     BAR,
-    BATHROBES,
     AIRCONDITIONING
 
 }
