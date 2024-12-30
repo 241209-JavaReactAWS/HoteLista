@@ -18,9 +18,24 @@ public class AccountService {
         this.accountDAO = accountDAO;
     }
 
-    /** Create a new Account */
-    public Account createNewAccount(Account account){
+    /** Register a new User Account 
+         * @throws Exception */
+        public Account registerNewAccount(Account account) throws Exception {
+        Optional<Account> acc = accountDAO.findById(account.getAccountId());
+        if (acc.isPresent()) {
+            throw new Exception("This account already exists. Please register with new information");
+        }
         return accountDAO.save(account);
+    }
+
+    /** Login a User Account 
+         * @throws Exception */
+        public Account loginAccount(Account account) throws Exception {
+        Optional<Account> acc = accountDAO.findByEmailAndPassword(account.getEmail(), account.getPassword());
+        if (acc.isEmpty()) {
+            throw new Exception("Account not found. Please neter valid credentials.");
+        }
+        return acc.get();
     }
 
     /** Get a list of all Accounts */
@@ -28,20 +43,44 @@ public class AccountService {
         return accountDAO.findAll();
     }
 
-    /** Look up (Filter/Search) Accounts by accountId */
-    public Account searchById(int accountId){
+    /** Look up (Filter/Search) Accounts by accountId 
+         * @throws Exception */
+        public Account searchById(int accountId) throws Exception {
         Optional<Account> acc = accountDAO.findById(accountId);
-        return acc.orElse(null);
+        if (acc.isEmpty()) {
+            throw new Exception("User with this ID not found");
+        }
+        return acc.get();
     }
 
-    /** Look up (Filter/Search) Accounts by email */
-    public Account searchByEmail(String email){
+    /** Look up (Filter/Search) Accounts by email 
+         * @throws Exception */
+        public Account searchByEmail(String email) throws Exception {
         Optional<Account> acc = accountDAO.findByEmail(email);
-        return acc.orElse(null);
+        if (acc.isEmpty()) {
+            throw new Exception("User with this Email Address not found");
+        }
+        return acc.get();
     }
 
     /** Look up (Filter/Search) Accounts by role type: user or hotel owner */
-    public List<Account> searchByRole(boolean isOwner){
+    public List<Account> searchByRole(boolean isOwner) {
         return accountDAO.findByRole(isOwner);
     }
+
+    /** Delete Account by accountId 
+         * @throws Exception */
+    public void deleteById(int accountId) throws Exception {
+        accountDAO.deleteById(accountId);
+    }
+
+    /** Edit a User Account 
+         * @throws Exception */
+        public Account editAccount(Account account) throws Exception {
+            Optional<Account> acc = accountDAO.findById(account.getAccountId());
+            if (acc.isEmpty()) {
+                throw new Exception("Account not found. Please try again");
+            }
+            return accountDAO.save(account);
+        }
 }
