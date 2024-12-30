@@ -1,5 +1,6 @@
 package com.revature.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -8,10 +9,15 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int accountId;
+    @Column(unique = true)
     private String email;
     private String password;
     private boolean isOwner;
 
+    public Account() {
+
+    }
+    
     public Account(int accountId, String email, String password, boolean isOwner) {
         this.accountId = accountId;
         this.email = email;
