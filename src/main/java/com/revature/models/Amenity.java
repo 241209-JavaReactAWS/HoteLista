@@ -1,6 +1,6 @@
 package com.revature.models;
 
-public enum Amenties {
+public enum Amenity {
     TOILETRIES,
     PARKING,
     FITNESSCENTER,

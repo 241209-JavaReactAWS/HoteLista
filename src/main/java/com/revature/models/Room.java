@@ -20,12 +20,12 @@ public class Room {
 
     @OneToMany
     @JoinColumn(name = "room_id")
-    private List<Amenties> roomAmenties;
+    private List<Amenity> roomAmenties;
 
     public Room() {
     }
 
-    public Room(int guestCapacity, RoomsType type, int roomId, List<Amenties> roomAmenties) {
+    public Room(int guestCapacity, RoomsType type, int roomId, List<Amenity> roomAmenties) {
         this.guestCapacity = guestCapacity;
         this.type = type;
         this.roomId = roomId;
@@ -56,11 +56,11 @@ public class Room {
         this.roomId = roomId;
     }
 
-    public List<Amenties> getRoomAmenties() {
+    public List<Amenity> getRoomAmenties() {
         return roomAmenties;
     }
 
-    public void setRoomAmenties(List<Amenties> roomAmenties) {
+    public void setRoomAmenties(List<Amenity> roomAmenties) {
         this.roomAmenties = roomAmenties;
     }
 }

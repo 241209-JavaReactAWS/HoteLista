@@ -24,12 +24,12 @@ public class Hotel {
             joinColumns = @JoinColumn(name = "hotel_id"),
             inverseJoinColumns = @JoinColumn(name = "amenity_id")
     )
-    private List<Amenties> hotelAmenities;
+    private List<Amenity> hotelAmenities;
 
     public Hotel() {
     }
 
-    public Hotel(int hotelID, String hotelName, String hotelAddress, List<Amenties> hotelAmenities) {
+    public Hotel(int hotelID, String hotelName, String hotelAddress, List<Amenity> hotelAmenities) {
         this.hotelID = hotelID;
         this.hotelName = hotelName;
         this.hotelAddress = hotelAddress;
@@ -60,11 +60,11 @@ public class Hotel {
         this.hotelAddress = hotelAddress;
     }
 
-    public List<Amenties> getHotelAmenities() {
+    public List<Amenity> getHotelAmenities() {
         return hotelAmenities;
     }
 
-    public void setHotelAmenities(List<Amenties> hotelAmenities) {
+    public void setHotelAmenities(List<Amenity> hotelAmenities) {
         this.hotelAmenities = hotelAmenities;
     }
 }
