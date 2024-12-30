@@ -33,7 +33,7 @@ public class AccountService {
         public Account loginAccount(Account account) throws Exception {
         Optional<Account> acc = accountDAO.findByEmailAndPassword(account.getEmail(), account.getPassword());
         if (acc.isEmpty()) {
-            throw new Exception("Account not found. Please neter valid credentials.");
+            throw new Exception("Account not found. Please enter valid credentials.");
         }
         return acc.get();
     }
