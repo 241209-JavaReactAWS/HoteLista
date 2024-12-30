@@ -1,11 +1,9 @@
 package com.revature.daos;
 
+import com.revature.models.HotelReview;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.revature.models.Account;
-
 @Repository
-public interface AccountDAO extends JpaRepository<Account, Integer> {
-    Account findByEmail(String email);
+public interface HotelReviewDao extends JpaRepository<HotelReview, Integer> {
 }
