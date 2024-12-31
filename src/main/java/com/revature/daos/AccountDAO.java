@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface AccountDAO extends JpaRepository<Account, Integer>{
     Optional<Account> findByEmail(String email);
-    List<Account> findByRole(boolean isOwner);
+    List<Account> findByisOwner(boolean isOwner);
     /** Verifying login */
     @Query("FROM Account WHERE email = :email and password = :password")
     Optional<Account> findByEmailAndPassword(String email, String password);

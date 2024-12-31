@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface InboxItemDAO extends JpaRepository<InboxItem, Integer> {
-    List<InboxItem> findByAccountId(int accountId);
+    List<InboxItem> findByFromAccount_AccountId(int fromAccountId);
 
 }

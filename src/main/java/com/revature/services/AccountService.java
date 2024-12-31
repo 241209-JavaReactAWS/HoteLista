@@ -77,7 +77,7 @@ public class AccountService {
 
     /** Look up (Filter/Search) Accounts by role type: user or hotel owner */
     public List<Account> searchByRole(boolean isOwner) {
-        return accountDAO.findByRole(isOwner);
+        return accountDAO.findByisOwner(isOwner);
     }
 
     /** Delete Account by accountId 

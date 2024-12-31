@@ -41,7 +41,7 @@ public class InboxItemService {
         inboxItemDAO.delete(inboxItem);
     }
 
-    public List<InboxItem> getAllAccountInboxItems(int accountId) {
-        return inboxItemDAO.findByAccountId(accountId);
+    public List<InboxItem> getAllAccountInboxItems(int fromAccountId) {
+        return inboxItemDAO.findByFromAccount_AccountId(fromAccountId);
     }
 }
