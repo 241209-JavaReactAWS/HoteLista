@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/accounts")
+// TODO: Add CrossOrign with credetials and modify endpoints accordingly
 public class AccountController {
     private final AccountService accountService;
     private final HotelServices hotelService;
@@ -35,7 +36,8 @@ public class AccountController {
 
     /** Create new Account handler */
     @PostMapping("/register")
-    public ResponseEntity<Account> registerNewAccountHandler(@RequestBody Account account, @RequestBody Hotel hotel){
+    public ResponseEntity<Account> registerNewAccountHandler(@RequestBody Account account, @RequestBody Hotel hotel, HttpSession session){
+        // TODO: UPDATED session here
         try {
             Account acc = accountService.registerNewAccount(account, hotel);
             return ResponseEntity.ok(acc);

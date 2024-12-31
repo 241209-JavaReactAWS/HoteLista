@@ -1,9 +1,15 @@
 package com.revature.models;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "hotel_amenities")
+@Setter
+@Getter
+@NoArgsConstructor
 public class HotelAmenity {
 
     @Id
@@ -18,14 +24,4 @@ public class HotelAmenity {
     @Column(nullable = false)
     private Amenity amenity;
 
-    public HotelAmenity() { }
-
-    public int getHotelAmenityId() { return hotelAmenityId; }
-    public void setHotelAmenityId(int hotelAmenityId) { this.hotelAmenityId = hotelAmenityId; }
-
-    public Hotel getHotel() { return hotel; }
-    public void setHotel(Hotel hotel) { this.hotel = hotel; }
-
-    public Amenity getAmenity() { return amenity; }
-    public void setAmenity(Amenity amenity) { this.amenity = amenity; }
 }

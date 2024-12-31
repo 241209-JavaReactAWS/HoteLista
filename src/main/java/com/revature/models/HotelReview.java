@@ -1,10 +1,17 @@
 package com.revature.models;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.Date;
 
 @Entity
 @Table(name = "hotel_reviews")
+@Setter
+@Getter
+@NoArgsConstructor
 public class HotelReview {
 
     @Id
@@ -19,27 +26,11 @@ public class HotelReview {
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 
+    // TODO: Ensure its only to the tenth place
     private double rating;
     private String content;
     private Date postedAt;
 
-    public HotelReview() { }
+    // TODO: Add Edited Status
 
-    public int getHotelReviewId() { return hotelReviewId; }
-    public void setHotelReviewId(int hotelReviewId) { this.hotelReviewId = hotelReviewId; }
-
-    public Account getAccount() { return account; }
-    public void setAccount(Account account) { this.account = account; }
-
-    public Hotel getHotel() { return hotel; }
-    public void setHotel(Hotel hotel) { this.hotel = hotel; }
-
-    public double getRating() { return rating; }
-    public void setRating(double rating) { this.rating = rating; }
-
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
-
-    public Date getPostedAt() { return postedAt; }
-    public void setPostedAt(Date postedAt) { this.postedAt = postedAt; }
 }

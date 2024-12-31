@@ -6,11 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//import org.hibernate.validator.constraints.CreditCardNumber;
-//
-//import javax.validation.constraints.NotNull;
-//import javax.validation.constraints.Size;
-
 @Entity
 @Table
 @Getter
@@ -21,20 +16,20 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer paymentId;
-    @Column(name = "card_holder_name")
     private String cardHolderName;
-    @Column(name = "card_number", unique = true)
-//    @CreditCardNumber
-    private Integer cardNumber;
+
+    //TODO: Validation For CardNumber Format
+    @Column(unique = true)
+    private String cardNumber;
     @Column(name = "cvv")
 //    @NotNull
 //    @Size(min=3, max=4)
     private Integer cvv;
     @Column(name = "postal_code")
-    private Integer postalcode;
+    private String postalCode;
 
     @ManyToOne
     @JoinColumn(name = "account_id")
-    private Account account_id;
+    private Account account;
 
 }

@@ -22,6 +22,7 @@ public class AccountService {
         this.hotelDAO = hotelDAO;
     }
 
+    // TODO: Create specific exceptions
     /** Register a new User Account 
          * @throws Exception */
         public Account registerNewAccount(Account account, Hotel hotel) throws Exception {
@@ -34,6 +35,8 @@ public class AccountService {
             /** Register the hotel owner and save the new hotel to hotel table, modify if hotel already exists */
             hotelDAO.save(hotel);
         }
+        // TODO: ONEtoONE between owner and HOTEL
+
         return accountDAO.save(account);
     }
 

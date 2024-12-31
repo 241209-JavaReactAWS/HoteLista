@@ -1,13 +1,18 @@
 package com.revature.models;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "rooms")
+@Setter
+@Getter
+@NoArgsConstructor
 public class Room {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int roomId;
@@ -15,54 +20,8 @@ public class Room {
     @Enumerated(EnumType.STRING)
     private RoomsType type;
 
-    @Column(name = "guest_capacity")
     private int guestCapacity;
-
-    @OneToMany
-    @JoinColumn(name = "room_id")
-    private List<Amenity> roomAmenties;
-
-    public Room() {
-    }
-
-    public Room(int guestCapacity, RoomsType type, int roomId, List<Amenity> roomAmenties) {
-        this.guestCapacity = guestCapacity;
-        this.type = type;
-        this.roomId = roomId;
-        this.roomAmenties = roomAmenties;
-    }
-
-    public int getGuestCapacity() {
-        return guestCapacity;
-    }
-
-    public void setGuestCapacity(int guestCapacity) {
-        this.guestCapacity = guestCapacity;
-    }
-
-    public RoomsType getType() {
-        return type;
-    }
-
-    public void setType(RoomsType type) {
-        this.type = type;
-    }
-
-    public int getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(int roomId) {
-        this.roomId = roomId;
-    }
-
-    public List<Amenity> getRoomAmenties() {
-        return roomAmenties;
-    }
-
-    public void setRoomAmenties(List<Amenity> roomAmenties) {
-        this.roomAmenties = roomAmenties;
-    }
+    private int available;
 }
 
 

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/rooms")
+// TODO: Add CrossOrign with credetials and modify endpoints accordingly
 public class RoomController {
     private final RoomServices roomServices;
 
