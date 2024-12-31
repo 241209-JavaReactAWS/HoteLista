@@ -1,7 +1,6 @@
 package com.revature.services;
 
 import com.revature.daos.HotelReviewDAO;
-import com.revature.exceptions.hotelreview.InvalidContentHotelReviewException;
 import com.revature.exceptions.hotelreview.NotFoundHotelReviewException;
 import com.revature.models.HotelReview;
 import org.springframework.beans.factory.annotation.Autowired;
