@@ -9,22 +9,24 @@ import lombok.Setter;
 import java.sql.Date;
 
 @Entity
-@Table
+@Table(name = "bookings")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Bookings {
+public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer bookingsId;
-    private Integer userId;
-    private Integer hotelId;
+    private Integer bookingId;
+
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
+
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    private Room room;
+
     private Date checkInDate;
     private Date checkOutDate;
-
-//    @ManyToOne
-//   @JoinColumn(name = "user_id")
-//   private User user_booking;
-
 }

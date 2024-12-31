@@ -18,6 +18,7 @@ public class AccountService {
         this.accountDAO = accountDAO;
     }
 
+    // TODO: Create specific exceptions
     /** Register a new User Account 
          * @throws Exception */
         public Account registerNewAccount(Account account) throws Exception {
@@ -25,6 +26,8 @@ public class AccountService {
         if (acc.isPresent()) {
             throw new Exception("This account already exists. Please register with new information");
         }
+        // TODO: ONEtoONE between owner and HOTEL
+
         return accountDAO.save(account);
     }
 

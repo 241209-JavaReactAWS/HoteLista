@@ -2,6 +2,7 @@ package com.revature.services;
 
 import com.revature.daos.HotelDAO;
 import com.revature.daos.RoomDAO;
+import com.revature.exceptions.hotel.NotFoundHotelException;
 import com.revature.models.Hotel;
 import com.revature.models.Room;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,43 +18,48 @@ import java.util.stream.Collectors;
 public class HotelServices {
 
     private final HotelDAO hotelDAO;
-    private final RoomDAO roomDAO;
+    private final RoomServices roomServices;
 
     @Autowired
-    public HotelServices(HotelDAO hotelDAO, RoomDAO roomDAO) {
+    public HotelServices(HotelDAO hotelDAO, RoomServices roomServices) {
         this.hotelDAO = hotelDAO;
-        this.roomDAO = roomDAO;
+        this.roomServices = roomServices;
     }
 
-    // TODO Create Hotel
     public Hotel createHotel(Hotel hotel) {
+        //TODO: Check hotel exists
         return hotelDAO.save(hotel);
     }
 
-    // TODO Get Hotel by ID
-    public Optional<Hotel> findHotelByID(int id) {
-        return hotelDAO.findById(id);
+    public Hotel findHotelByID(int id) throws NotFoundHotelException {
+        Optional<Hotel> optionalHotel =  hotelDAO.findById(id);
+        if(optionalHotel.isEmpty()){
+            throw new NotFoundHotelException("");
+        }
+        return optionalHotel.get();
     }
 
-    // TODO Get All Hotels
     public Set<Hotel> getAllHotel() {
         List<Hotel> potentialHotels = hotelDAO.findAll();
         return new HashSet<Hotel>(potentialHotels);
     }
 
-    // TODO Update Hotel Information
+
     public Hotel updateHotelInfo(Hotel hotelToBeUpdated) {
+        // TODO: Check if hotel exists
         return hotelDAO.save(hotelToBeUpdated);
     }
 
-    // TODO Delete Hotel
     public void deleteHotel(Hotel hotel) {
         hotelDAO.delete(hotel);
     }
 
-    // TODO Search Hotels by Name
-    public Optional<Hotel> getHotelByName(String hotelName) {
-        return hotelDAO.getByHotelName(hotelName);
+    public Hotel getHotelByName(String hotelName) throws NotFoundHotelException {
+        Optional<Hotel> optionalHotel =  hotelDAO.getByHotelName(hotelName);
+        if(optionalHotel.isEmpty()){
+            throw new NotFoundHotelException("");
+        }
+        return optionalHotel.get();
     }
 
     // TODO Filter Hotels by Amenities
@@ -68,44 +74,4 @@ public class HotelServices {
                 .collect(Collectors.toSet());
 
     }
-    // TODO add Room to hotel
-    public Hotel addRoomFromHotel(String hotelname, int roomID) {
-        Optional<Hotel> possibleHotel = hotelDAO.getByHotelName(hotelname);
-        Optional<Room> possibleRoom = roomDAO.findById(roomID);
-
-        if(possibleHotel.isEmpty() || possibleRoom.isEmpty()){
-            return null;
-        }
-        Hotel actualHotel = possibleHotel.get();
-        Room actualRoom = possibleRoom.get();
-        if(!actualHotel.getRooms().contains(actualRoom)){
-            return null;
-        }
-        Set<Room> rooms = actualHotel.getRooms();
-        rooms.add(actualRoom);
-        actualHotel.setRooms(rooms);
-
-        return hotelDAO.save(actualHotel);
-    }
-
-    // TODO Delete Room from hotel
-    public Hotel removeRoomFromHotel(String hotelname, int roomID) {
-        Optional<Hotel> possibleHotel = hotelDAO.getByHotelName(hotelname);
-        Optional<Room> possibleRoom = roomDAO.findById(roomID);
-
-        if(possibleHotel.isEmpty() || possibleRoom.isEmpty()){
-            return null;
-        }
-        Hotel actualHotel = possibleHotel.get();
-        Room actualRoom = possibleRoom.get();
-        if(!actualHotel.getRooms().contains(actualRoom)){
-            return null;
-        }
-        Set<Room> rooms = actualHotel.getRooms();
-        rooms.remove(actualRoom);
-        actualHotel.setRooms(rooms);
-
-        return hotelDAO.save(actualHotel);
-    }
-
 }
