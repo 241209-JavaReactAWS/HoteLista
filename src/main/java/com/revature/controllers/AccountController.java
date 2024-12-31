@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.models.Account;
+import com.revature.models.Hotel;
 import com.revature.services.AccountService;
+import com.revature.services.HotelServices;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -21,19 +23,21 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/accounts")
 public class AccountController {
     private final AccountService accountService;
+    private final HotelServices hotelService;
 
     @Autowired
-    public AccountController(AccountService accountService) {
+    public AccountController(AccountService accountService, HotelServices hotelService) {
         this.accountService = accountService;
+        this.hotelService = hotelService;
     }
 
     /** Defining endpoints */
 
     /** Create new Account handler */
     @PostMapping("/register")
-    public ResponseEntity<Account> registerNewAccountHandler(@RequestBody Account account){
+    public ResponseEntity<Account> registerNewAccountHandler(@RequestBody Account account, @RequestBody Hotel hotel){
         try {
-            Account acc = accountService.registerNewAccount(account);
+            Account acc = accountService.registerNewAccount(account, hotel);
             return ResponseEntity.ok(acc);
         } catch (Exception e) {
             System.out.println(e.getMessage());

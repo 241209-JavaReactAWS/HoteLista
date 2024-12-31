@@ -7,23 +7,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.revature.daos.AccountDAO;
+import com.revature.daos.HotelDAO;
 import com.revature.models.Account;
+import com.revature.models.Hotel;
 
 @Service
 public class AccountService {
     private final AccountDAO accountDAO;
+    private final HotelDAO hotelDAO;
 
     @Autowired
-    public AccountService(AccountDAO accountDAO) {
+    public AccountService(AccountDAO accountDAO, HotelDAO hotelDAO) {
         this.accountDAO = accountDAO;
+        this.hotelDAO = hotelDAO;
     }
 
     /** Register a new User Account 
          * @throws Exception */
-        public Account registerNewAccount(Account account) throws Exception {
+        public Account registerNewAccount(Account account, Hotel hotel) throws Exception {
         Optional<Account> acc = accountDAO.findById(account.getAccountId());
         if (acc.isPresent()) {
             throw new Exception("This account already exists. Please register with new information");
+        }
+        /** boolean isOwner evaluates to true, meaning a hotel owner is trying to register */
+        if (acc.get().getRole()) {
+            /** Register the hotel owner and save the new hotel to hotel table, modify if hotel already exists */
+            hotelDAO.save(hotel);
         }
         return accountDAO.save(account);
     }
