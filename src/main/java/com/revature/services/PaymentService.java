@@ -1,7 +1,7 @@
 package com.revature.services;
 
 import com.revature.daos.AccountDAO;
-import com.revature.daos.BookingDAO;
+//import com.revature.daos.BookingDAO;
 import com.revature.daos.PaymentDAO;
 import com.revature.models.Account;
 import com.revature.models.Payment;
@@ -15,13 +15,11 @@ import java.util.Optional;
 public class PaymentService {
     private final PaymentDAO paymentDAO;
     private final AccountDAO accountDAO;
-    private final BookingDAO bookingDAO;
 
     @Autowired
-    public PaymentService(PaymentDAO paymentDAO, AccountDAO accountDAO, BookingDAO bookingDAO) {
+    public PaymentService(PaymentDAO paymentDAO, AccountDAO accountDAO) {
         this.paymentDAO = paymentDAO;
         this.accountDAO = accountDAO;
-        this.bookingDAO = bookingDAO;
     }
 
     public PaymentDto addPayment(Payment payment, Integer userId) {
@@ -35,16 +33,15 @@ public class PaymentService {
                 createdCard.setCardHolderName(payment.getCardHolderName());
                 createdCard.setCvv(payment.getCvv());
                 createdCard.setPostalcode(payment.getPostalcode());
-                createdCard.setAccount(retreiveUser.get());
+                createdCard.setAccount_id(retreiveUser.get());
 
                 Payment result = paymentDAO.save(createdCard);
 
-                //Adding result to paymentDto
                 paymentDto.setPaymentId(result.getPaymentId());
                 paymentDto.setCvv(result.getCvv());
                 paymentDto.setCardNumber(result.getCardNumber());
                 paymentDto.setPostalcode(result.getPostalcode());
-                paymentDto.setAccount(retreiveUser.get());
+//                paymentDto.setAccount(retreiveUser.get());
 
                 return paymentDto;
             }
@@ -52,16 +49,3 @@ public class PaymentService {
     }
 }
 
-//Optional<Account> retreiveUser = accountDAO.findById(userId);
-//            if (retreiveUser.isEmpty()) {
-//Payment createdCard = new Payment();
-//                createdCard.setCardNumber(cardToBeAdded.getCardNumber());
-//        createdCard.setCardHolderName(cardToBeAdded.getCardHolderName());
-//        createdCard.setCvv(cardToBeAdded.getCvv());
-//        createdCard.setPostcode(cardToBeAdded.getPostcode());
-//        createdCard.setUser(retreiveUser.get());
-//Payment result = paymentRepository.save(createdCard);
-//                return result;
-//            }else{
-//                    throw new RuntimeException();
-//            }
