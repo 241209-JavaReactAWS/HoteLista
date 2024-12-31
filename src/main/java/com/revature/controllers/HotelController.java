@@ -21,6 +21,5 @@ public class HotelController {
     // TODO Get All Hotels
     // TODO Update Hotel Information
     // TODO Delete Hotel
-    // TODO Search Hotels by Name
-    // TODO Filter Hotels by Amenities
+    // TODO Search Hotels by Name TODO Filter Hotels by Amenities
 }
