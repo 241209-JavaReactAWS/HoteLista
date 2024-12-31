@@ -1,10 +1,12 @@
 package com.revature.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 
+import java.util.List;
+
+@Entity
+@Table
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,11 +19,14 @@ public class Account {
     private String phoneNumber;
     private boolean isOwner;
 
-    public Account() {
+    @OneToMany(mappedBy = "account_id")
+    @JsonIgnoreProperties("account_id")
+    private List<Payment> paymentsList;
 
+    public Account() {
     }
 
-    public Account(int accountId, String email, String password, String firstName, String lastName, String phoneNumber, boolean isOwner) {
+    public Account(int accountId, String email, String password, String firstName, String lastName, String phoneNumber, boolean isOwner, List<Payment> paymentsList) {
         this.accountId = accountId;
         this.email = email;
         this.password = password;
@@ -29,6 +34,7 @@ public class Account {
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.isOwner = isOwner;
+        this.paymentsList = paymentsList;
     }
 
     public int getAccountId() {
@@ -85,5 +91,21 @@ public class Account {
 
     public void setRole(boolean isOwner) {
         this.isOwner = isOwner;
+    }
+
+    public boolean isOwner() {
+        return isOwner;
+    }
+
+    public void setOwner(boolean owner) {
+        isOwner = owner;
+    }
+
+    public List<Payment> getPaymentsList() {
+        return paymentsList;
+    }
+
+    public void setPaymentsList(List<Payment> paymentsList) {
+        this.paymentsList = paymentsList;
     }
 }
