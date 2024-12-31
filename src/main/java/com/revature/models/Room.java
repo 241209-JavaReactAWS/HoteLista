@@ -17,6 +17,10 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int roomId;
 
+    @ManyToOne
+    @JoinColumn(name = "hotel_id")
+    private Hotel hotel;
+
     @Enumerated(EnumType.STRING)
     private RoomsType type;
 

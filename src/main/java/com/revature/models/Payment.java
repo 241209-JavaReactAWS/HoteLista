@@ -14,8 +14,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Payment {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int paymentId;
+
 
     private String cardHolderName;
 
@@ -23,8 +24,6 @@ public class Payment {
     @Column(unique = true)
     private String cardNumber;
     @Column(name = "cvv")
-//    @NotNull
-//    @Size(min=3, max=4)
     private int cvv;
     @Column(name = "postal_code")
     private String postalCode;

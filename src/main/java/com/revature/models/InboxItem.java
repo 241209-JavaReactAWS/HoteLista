@@ -19,11 +19,11 @@ public class InboxItem {
     private int inboxId;
 
     @OneToOne
-    @JoinColumn(name = "account_id")
+    @JoinColumn(name = "to_account_id")
     private Account toAccount;
 
     @OneToOne
-    @JoinColumn(name = "account_id")
+    @JoinColumn(name = "from_account_id")
     private Account fromAccount;
 
     private Date notificationTime;
