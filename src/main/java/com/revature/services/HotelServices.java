@@ -22,43 +22,47 @@ public class HotelServices {
     }
 
     // TODO Create Hotel
-    public Hotel createHotel(Hotel hotel){
+    public Hotel createHotel(Hotel hotel) {
         return hotelDAO.save(hotel);
     }
+
     // TODO Get Hotel by ID
-    public Optional<Hotel> findHotelByID(int id){
+    public Optional<Hotel> findHotelByID(int id) {
         return hotelDAO.findById(id);
     }
 
     // TODO Get All Hotels
-    public Set<Hotel> getAllHotel(){
-        List<Hotel> potetionalHotels = hotelDAO.findAll();;
-        return new HashSet<Hotel>(potetionalHotels);
+    public Set<Hotel> getAllHotel() {
+        List<Hotel> potentialHotels = hotelDAO.findAll();
+        return new HashSet<Hotel>(potentialHotels);
     }
+
     // TODO Update Hotel Information
-    public Hotel updateHotelInfo(Hotel hotelToBeUpdated){
+    public Hotel updateHotelInfo(Hotel hotelToBeUpdated) {
         return hotelDAO.save(hotelToBeUpdated);
     }
+
     // TODO Delete Hotel
-    public void deleteHotel(Hotel hotel){
+    public void deleteHotel(Hotel hotel) {
         hotelDAO.delete(hotel);
     }
+
     // TODO Search Hotels by Name
-    public Optional<Hotel> getHotelByName(String hotelName){
-        Optional<Hotel> possibleHotel = hotelDAO.getByHotelName(hotelName);
-        return possibleHotel;
+    public Optional<Hotel> getHotelByName(String hotelName) {
+        return hotelDAO.getByHotelName(hotelName);
     }
+
     // TODO Filter Hotels by Amenities
-    public Set<Hotel> filterHotelsByAmenities(Set<String> amenities){
+    public Set<Hotel> filterHotelsByAmenities(Set<String> amenities) {
         Set<Hotel> allHotels = getAllHotel();
-        if(amenities.isEmpty()){
+        if (amenities.isEmpty()) {
             return allHotels;
         }
-        Set<Hotel> filteredHotels = allHotels.stream()
+        return allHotels.stream()
                 .filter(hotel -> hotel.getHotelAmenities() != null
-                        && hotel.getHotelAmenities().contains(amenities )).collect(Collectors.toSet());
-        return  filteredHotels;
-//
+                        && hotel.getHotelAmenities().contains(amenities))
+                .collect(Collectors.toSet());
+
     }
 
 }

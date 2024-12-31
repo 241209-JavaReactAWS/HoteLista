@@ -26,22 +26,22 @@ public class InboxItemService {
         // TODO: check if account is valid
         // TODO: check if hotel is valid
 
-        if(inboxItem.getNotificationTime() == null){
+        if (inboxItem.getNotificationTime() == null) {
             throw new InvalidDateInboxException();
         }
 
-        if(inboxItem.getDetails().isEmpty()){
+        if (inboxItem.getDetails().isEmpty()) {
             throw new InvalidDetailsInboxException();
         }
 
         return inboxItemDAO.save(inboxItem);
     }
 
-    public void deleteInboxItem(InboxItem inboxItem){
+    public void deleteInboxItem(InboxItem inboxItem) {
         inboxItemDAO.delete(inboxItem);
     }
 
-    public List<InboxItem> getAllAccountInboxItems(int accountId){
+    public List<InboxItem> getAllAccountInboxItems(int accountId) {
         return inboxItemDAO.findByAccountId(accountId);
     }
 }
