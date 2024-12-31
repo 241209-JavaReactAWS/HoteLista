@@ -26,7 +26,7 @@ public class Account {
     @Column(name = "role")
     private boolean isOwner;
 
-    @OneToMany(mappedBy = "account_id")
+    @OneToMany(mappedBy = "payment_id")
     private List<Payment> paymentsList;
 
     public boolean getRole(){ return isOwner; }

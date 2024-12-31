@@ -27,12 +27,10 @@ public class Hotel {
     @Column(nullable = false)
     private String hotelAddress;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotel_amenity_id")
+    @OneToMany(mappedBy = "hotel_amenity_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<HotelAmenity> hotelAmenities;
 
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
+    @OneToMany(mappedBy = "room_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Room> rooms;
 }

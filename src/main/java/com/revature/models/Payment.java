@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table
+@Table(name = "payments")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,7 +15,8 @@ import lombok.Setter;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer paymentId;
+    private int paymentId;
+
     private String cardHolderName;
 
     //TODO: Validation For CardNumber Format
@@ -24,7 +25,7 @@ public class Payment {
     @Column(name = "cvv")
 //    @NotNull
 //    @Size(min=3, max=4)
-    private Integer cvv;
+    private int cvv;
     @Column(name = "postal_code")
     private String postalCode;
 
