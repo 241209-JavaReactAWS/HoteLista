@@ -1,10 +1,16 @@
 package com.revature.controllers;
 
 import com.revature.services.HotelServices;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
+@RequestMapping("/hotels")
 public class HotelController {
     private final HotelServices hotelServices;
 
+    @Autowired
     public HotelController(HotelServices hotelServices) {
         this.hotelServices = hotelServices;
     }

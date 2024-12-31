@@ -1,7 +1,9 @@
 package com.revature.services;
 
 import com.revature.daos.HotelDAO;
+import com.revature.daos.RoomDAO;
 import com.revature.models.Hotel;
+import com.revature.models.Room;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +17,12 @@ import java.util.stream.Collectors;
 public class HotelServices {
 
     private final HotelDAO hotelDAO;
+    private final RoomDAO roomDAO;
 
     @Autowired
-    public HotelServices(HotelDAO hotelDAO) {
+    public HotelServices(HotelDAO hotelDAO, RoomDAO roomDAO) {
         this.hotelDAO = hotelDAO;
+        this.roomDAO = roomDAO;
     }
 
     // TODO Create Hotel
@@ -63,6 +67,45 @@ public class HotelServices {
                         && hotel.getHotelAmenities().contains(amenities))
                 .collect(Collectors.toSet());
 
+    }
+    // TODO add Room to hotel
+    public Hotel addRoomFromHotel(String hotelname, int roomID) {
+        Optional<Hotel> possibleHotel = hotelDAO.getByHotelName(hotelname);
+        Optional<Room> possibleRoom = roomDAO.findById(roomID);
+
+        if(possibleHotel.isEmpty() || possibleRoom.isEmpty()){
+            return null;
+        }
+        Hotel actualHotel = possibleHotel.get();
+        Room actualRoom = possibleRoom.get();
+        if(!actualHotel.getRooms().contains(actualRoom)){
+            return null;
+        }
+        Set<Room> rooms = actualHotel.getRooms();
+        rooms.add(actualRoom);
+        actualHotel.setRooms(rooms);
+
+        return hotelDAO.save(actualHotel);
+    }
+
+    // TODO Delete Room from hotel
+    public Hotel removeRoomFromHotel(String hotelname, int roomID) {
+        Optional<Hotel> possibleHotel = hotelDAO.getByHotelName(hotelname);
+        Optional<Room> possibleRoom = roomDAO.findById(roomID);
+
+        if(possibleHotel.isEmpty() || possibleRoom.isEmpty()){
+            return null;
+        }
+        Hotel actualHotel = possibleHotel.get();
+        Room actualRoom = possibleRoom.get();
+        if(!actualHotel.getRooms().contains(actualRoom)){
+            return null;
+        }
+        Set<Room> rooms = actualHotel.getRooms();
+        rooms.remove(actualRoom);
+        actualHotel.setRooms(rooms);
+
+        return hotelDAO.save(actualHotel);
     }
 
 }

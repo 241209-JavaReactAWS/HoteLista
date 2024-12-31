@@ -2,6 +2,7 @@ package com.revature.models;
 
 import jakarta.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "hotels")
@@ -18,21 +19,19 @@ public class Hotel {
     private String hotelAddress;
 
 
-    @ManyToOne
-    @JoinTable(
-            name = "hotel_amenities",
-            joinColumns = @JoinColumn(name = "hotel_id"),
-            inverseJoinColumns = @JoinColumn(name = "amenity_id")
-    )
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id") // This assumes a foreign key in the Amenity table
     private List<Amenity> hotelAmenities;
 
+    private Set<Room> rooms;
     public Hotel() {
     }
 
-    public Hotel(int hotelID, String hotelName, String hotelAddress, List<Amenity> hotelAmenities) {
-        this.hotelID = hotelID;
-        this.hotelName = hotelName;
+    public Hotel(String hotelAddress, Set<Room> rooms, String hotelName, int hotelID, List<Amenity> hotelAmenities) {
         this.hotelAddress = hotelAddress;
+        this.rooms = rooms;
+        this.hotelName = hotelName;
+        this.hotelID = hotelID;
         this.hotelAmenities = hotelAmenities;
     }
 
@@ -66,5 +65,13 @@ public class Hotel {
 
     public void setHotelAmenities(List<Amenity> hotelAmenities) {
         this.hotelAmenities = hotelAmenities;
+    }
+
+    public Set<Room> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(Set<Room> rooms) {
+        this.rooms = rooms;
     }
 }
