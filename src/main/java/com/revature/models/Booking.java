@@ -27,6 +27,7 @@ public class Booking {
     @JoinColumn(name = "room_id")
     private Room room;
 
+    private Integer lengthOfStay;
     private Date checkInDate;
     private Date checkOutDate;
 }
