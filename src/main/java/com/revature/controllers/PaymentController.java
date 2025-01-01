@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import com.revature.exceptions.payment.PaymentNotCreated;
 import com.revature.exceptions.payment.PaymentNotFound;
 import com.revature.models.Payment;
 import com.revature.requests.PaymentDTO;
@@ -30,7 +31,7 @@ public class PaymentController {
             PaymentDTO payment = paymentService.addPayment(cardToBeCreated, accountId);
             return ResponseEntity.status(HttpStatus.CREATED).body(payment);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            throw new PaymentNotCreated("INVALID FIELD");
         }
     }
 
@@ -41,7 +42,6 @@ public class PaymentController {
             return ResponseEntity.status(HttpStatus.OK).body(deleteMessage);
         } catch (Exception e) {
             throw new PaymentNotFound("PAYMENT ID NOT FOUND");
-
         }
     }
 
