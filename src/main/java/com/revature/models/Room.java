@@ -1,5 +1,6 @@
 package com.revature.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,10 @@ public class Room {
     @ManyToOne
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
+
+    @OneToMany(mappedBy = "room")
+    @JsonIgnoreProperties("room")
+    private List<Booking> bookings;
 
     @Enumerated(EnumType.STRING)
     private RoomsType type;
