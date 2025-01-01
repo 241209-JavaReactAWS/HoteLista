@@ -1,5 +1,6 @@
 package com.revature.controllers;
 
+import com.revature.exceptions.payment.PaymentNotFound;
 import com.revature.models.Payment;
 import com.revature.requests.PaymentDTO;
 import com.revature.services.PaymentService;
@@ -37,11 +38,14 @@ public class PaymentController {
     public ResponseEntity<String> deletePaymentMethod(@PathVariable Integer accountId, @PathVariable Integer paymentId) {
         try {
             String deleteMessage = paymentService.deletePayment(accountId, paymentId);
-            return ResponseEntity.status(HttpStatus.CREATED).body(deleteMessage);
+            return ResponseEntity.status(HttpStatus.OK).body(deleteMessage);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            throw new PaymentNotFound("PAYMENT ID NOT FOUND");
+
         }
     }
+
+
 
 
 
