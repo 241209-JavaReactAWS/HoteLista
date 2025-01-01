@@ -1,24 +1,23 @@
 package com.revature.requests;
 
 
+import com.revature.models.Account;
 import com.revature.models.Payment;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PaymentDTO {
         private Integer paymentId;
         private String cardHolderName;
         private String cardNumber;
         private Integer cvv;
         private String postalCode;
+        private Account account;
 
-        public PaymentDTO(Payment payment){
-                this.paymentId = payment.getPaymentId();
-                this.cardHolderName = payment.getCardHolderName();
-                this.cardNumber = payment.getCardNumber();
-                this.cvv = payment.getCvv();
-                this.postalCode = payment.getPostalCode();
-        }
 }

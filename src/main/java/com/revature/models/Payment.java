@@ -16,16 +16,11 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int paymentId;
-
-
     private String cardHolderName;
-
     //TODO: Validation For CardNumber Format
-    @Column(unique = true)
+//    @Column(unique = true)
     private String cardNumber;
-    @Column(name = "cvv")
     private int cvv;
-    @Column(name = "postal_code")
     private String postalCode;
 
     @ManyToOne

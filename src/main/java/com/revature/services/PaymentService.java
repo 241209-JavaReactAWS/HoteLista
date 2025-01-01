@@ -4,6 +4,7 @@ import com.revature.daos.AccountDAO;
 import com.revature.daos.PaymentDAO;
 import com.revature.models.Account;
 import com.revature.models.Payment;
+import com.revature.requests.PaymentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,18 @@ public class PaymentService {
         createdCard.setCvv(payment.getCvv());
         createdCard.setPostalCode(payment.getPostalCode());
         createdCard.setAccount(account);
-        return paymentDAO.save(createdCard);
+
+        Payment savedCard = paymentDAO.save(createdCard);
+
+//        PaymentDTO submitCard = new PaymentDTO();
+////        submitCard.setPaymentId(savedCard.getPaymentId());
+//        submitCard.setCardNumber(savedCard.getCardNumber());
+//        submitCard.setCardHolderName(savedCard.getCardHolderName());
+//        submitCard.setCvv(savedCard.getCvv());
+//        submitCard.setPostalCode(savedCard.getPostalCode());
+//        submitCard.setAccount(savedCard.getAccount());
+
+        return savedCard;
     }
 }
 
