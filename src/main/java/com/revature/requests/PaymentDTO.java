@@ -18,6 +18,4 @@ public class PaymentDTO {
         private String cardNumber;
         private Integer cvv;
         private String postalCode;
-        private Account account;
-
 }

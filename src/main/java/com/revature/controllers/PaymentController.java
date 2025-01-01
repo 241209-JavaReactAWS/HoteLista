@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/payments")
 @CrossOrigin
@@ -44,6 +46,18 @@ public class PaymentController {
             throw new PaymentNotFound("PAYMENT ID NOT FOUND");
         }
     }
+
+    @GetMapping("/fetchAll/{accountId}")
+    public ResponseEntity<List<PaymentDTO>> fetchAllPaymentMethod(@PathVariable Integer accountId) {
+        try {
+            List<PaymentDTO> paymentList = paymentService.fetchAllPaymentList(accountId);
+            return ResponseEntity.status(HttpStatus.OK).body(paymentList);
+        } catch (Exception e) {
+            throw new PaymentNotFound("NO LIST OF PAYMENTS FOUND");
+        }
+    }
+
+
 
 
 
