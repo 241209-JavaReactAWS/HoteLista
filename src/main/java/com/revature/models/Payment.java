@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.CreditCardNumber;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "payments")
@@ -15,17 +19,15 @@ import lombok.Setter;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int paymentId;
-
-
+    private Integer paymentId;
+    @Column(nullable = false)
     private String cardHolderName;
-
-    //TODO: Validation For CardNumber Format
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
+    @CreditCardNumber
     private String cardNumber;
-    @Column(name = "cvv")
-    private int cvv;
-    @Column(name = "postal_code")
+    @Column(nullable = false)
+    private Integer cvv;
+    @Column(nullable = false)
     private String postalCode;
 
     @ManyToOne
