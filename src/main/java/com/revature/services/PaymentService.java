@@ -48,5 +48,14 @@ public class PaymentService {
 
         return submitCard;
     }
+
+    public String deletePayment(Integer accountId, Integer paymentId) throws Exception {
+        String result = "";
+        Account account = accountService.searchById(accountId);
+        paymentDAO.deleteById(paymentId);
+        result = "Account Id : " + account.getAccountId() + " Payment Id : " + paymentId +
+                " Payment Removed";
+        return result;
+    }
 }
 

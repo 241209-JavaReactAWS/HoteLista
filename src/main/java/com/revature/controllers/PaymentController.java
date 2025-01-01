@@ -32,5 +32,18 @@ public class PaymentController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
+
+    @DeleteMapping("/delete/{accountId}/{paymentId}")
+    public ResponseEntity<String> deletePaymentMethod(@PathVariable Integer accountId, @PathVariable Integer paymentId) {
+        try {
+            String deleteMessage = paymentService.deletePayment(accountId, paymentId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(deleteMessage);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+
+
 }
 
