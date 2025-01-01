@@ -1,5 +1,6 @@
 package com.revature.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,8 @@ public class Account {
     private boolean isOwner;
 
     @OneToMany(mappedBy = "account")
+    //PREVENTS INFINITE LOOP
+    @JsonIgnoreProperties("account")
     private List<Payment> paymentsList;
 
     public boolean getRole(){ return isOwner; }

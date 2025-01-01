@@ -27,7 +27,7 @@ public class PaymentService {
      *
      * */
 
-    public Payment addPayment(Payment payment, Integer accountId) throws Exception {
+    public PaymentDTO addPayment(Payment payment, Integer accountId) throws Exception {
         Account account = accountService.searchById(accountId);
         Payment createdCard = new Payment();
         createdCard.setCardNumber(payment.getCardNumber());
@@ -38,15 +38,15 @@ public class PaymentService {
 
         Payment savedCard = paymentDAO.save(createdCard);
 
-//        PaymentDTO submitCard = new PaymentDTO();
-////        submitCard.setPaymentId(savedCard.getPaymentId());
-//        submitCard.setCardNumber(savedCard.getCardNumber());
-//        submitCard.setCardHolderName(savedCard.getCardHolderName());
-//        submitCard.setCvv(savedCard.getCvv());
-//        submitCard.setPostalCode(savedCard.getPostalCode());
-//        submitCard.setAccount(savedCard.getAccount());
+        PaymentDTO submitCard = new PaymentDTO();
+        submitCard.setPaymentId(savedCard.getPaymentId());
+        submitCard.setCardNumber(savedCard.getCardNumber());
+        submitCard.setCardHolderName(savedCard.getCardHolderName());
+        submitCard.setCvv(savedCard.getCvv());
+        submitCard.setPostalCode(savedCard.getPostalCode());
+        submitCard.setAccount(savedCard.getAccount());
 
-        return savedCard;
+        return submitCard;
     }
 }
 

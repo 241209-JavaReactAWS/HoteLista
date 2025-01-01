@@ -21,20 +21,12 @@ public class PaymentController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Payment> createPaymentMethod(@RequestBody Payment cardToBeCreated, @RequestParam Integer accountId) {
+    public ResponseEntity<PaymentDTO> createPaymentMethod(@RequestBody Payment cardToBeCreated, @RequestParam Integer accountId) {
 
         //TODO: USE httpsession instead of userID
 
         try {
-            Payment payment = paymentService.addPayment(cardToBeCreated, accountId);
-//            PaymentDTO newPayment = new PaymentDTO();
-//            newPayment.setPaymentId(payment.getPaymentId());
-//            newPayment.setCvv(payment.getCvv());
-//            newPayment.setAccount(payment.getAccount());
-//            newPayment.setCardNumber(payment.getCardNumber());
-//            newPayment.setCardHolderName(payment.getCardHolderName());
-//            newPayment.setPostalCode(payment.getPostalCode());
-
+            PaymentDTO payment = paymentService.addPayment(cardToBeCreated, accountId);
             return ResponseEntity.status(HttpStatus.CREATED).body(payment);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
