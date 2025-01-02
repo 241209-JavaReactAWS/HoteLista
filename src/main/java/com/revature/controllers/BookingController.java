@@ -28,10 +28,10 @@ public class BookingController {
     }
 
     @PostMapping("/add/{accountId}/{roomId}/{paymentId}")
-    public ResponseEntity<BookingDTO> addNewBooking(@PathVariable Integer accountId, @PathVariable Integer roomId, @PathVariable Integer paymentId){
+    public ResponseEntity<BookingDTO> addNewBooking(@RequestBody Booking booking, @PathVariable Integer accountId, @PathVariable Integer roomId, @PathVariable Integer paymentId){
 
         try{
-            BookingDTO newBooking = bookingService.addNewBooking(accountId, roomId, paymentId);
+            BookingDTO newBooking = bookingService.addNewBooking(booking, accountId, roomId, paymentId);
             return ResponseEntity.status(HttpStatus.CREATED).body(newBooking);
         }catch (Exception e) {
             throw new BookingNotCreated("BOOKING FAILED");

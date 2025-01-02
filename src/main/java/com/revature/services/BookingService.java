@@ -17,11 +17,13 @@ import java.util.Optional;
 
 @Service
 public class BookingService {
+
         private final PaymentDAO paymentDAO;
         private final AccountService accountService;
         private final BookingDAO bookingDAO;
         private final RoomDAO roomDAO;
         private final PaymentService paymentService;
+
     @Autowired
     public BookingService(PaymentDAO paymentDAO, AccountService accountService, BookingDAO bookingDAO, RoomDAO roomDAO, PaymentService paymentService) {
         this.paymentDAO = paymentDAO;
@@ -30,6 +32,24 @@ public class BookingService {
         this.roomDAO = roomDAO;
         this.paymentService = paymentService;
     }
+
+    public Double roomPricing(RoomsType roomsType){
+        Double price = 0.00;
+        if(roomsType.equals(RoomsType.SUITE)){
+            price = 200.00;
+            return price;
+        } else if(roomsType.equals(RoomsType.TRIPLE)){
+            price = 150.00;
+            return price;
+        } else if(roomsType.equals(RoomsType.DOUBLE)){
+            price = 100.00;
+            return price;
+        } else {
+            price = 50.00;
+            return price;
+        }
+    }
+
     public List<BookingDTO> fetchAllBookingList(Integer accountId) throws Exception {
         List<BookingDTO> allBookings = new ArrayList<>();
         Account account = accountService.searchById(accountId);
@@ -50,33 +70,52 @@ public class BookingService {
             return allBookings;
         }
     }
+
 //    public BookingDTO addNewBooking(Integer accountId, Integer roomId,Integer paymentId) throws Exception {
-public BookingDTO addNewBooking(Integer accountId, Integer roomId,Integer paymentId) throws Exception {
+    public BookingDTO addNewBooking(Booking booking, Integer accountId, Integer roomId,Integer paymentId) throws Exception {
 
     //        add validation
         Account account = accountService.searchById(accountId);
         Optional<Room> retreiveRoom = roomDAO.findById(roomId);
-//        Payment checkoutProcess = paymentService.checkoutPayment(account,paymentId);
         Optional<Payment> checkoutProcess = paymentDAO.findById(paymentId);
         if (checkoutProcess.isEmpty()) {
             throw new BookingNotCreated("PAYMENT FAILED");
         } else {
             Booking newBooking = new Booking();
-            newBooking.setRoom(retreiveRoom.get());
             newBooking.setAccount(account);
             newBooking.setStatus(BookingStatus.COMPLETE_PAYMENT);
-//            newBooking.setPayment(checkoutProcess.get());
+            newBooking.setLengthOfStay(booking.getLengthOfStay());
+            //cCall a method to get price based on type
+           Double price = this.roomPricing(retreiveRoom.get().getType());
+            newBooking.setTotalPrice(price);
 
-//            newBooking.setPayment(checkoutProcess.get());
-//        add requestbody to this
-//        newBooking.setLengthOfStay(booking.getLengthOfStay());
+            Room newRoom = new Room();
+            newRoom.setGuestCapacity(retreiveRoom.get().getGuestCapacity());
+            newRoom.setRoomId(retreiveRoom.get().getRoomId());
+            newRoom.setHotel(retreiveRoom.get().getHotel());
+            newRoom.setType(retreiveRoom.get().getType());
+            //Set room to no availablility
+            newRoom.setAvailable(0);
+
+            newBooking.setRoom(newRoom);
+
+            roomDAO.save(newRoom);
+            List<Booking> setBookingVar = new ArrayList<>();
+            setBookingVar.add(newBooking);
+            newRoom.setBookings(setBookingVar);
             Booking availableBooking = bookingDAO.save(newBooking);
 
+
             BookingDTO bookingDTO = new BookingDTO();
+            //Booking information
+            bookingDTO.setLengthOfStay(newBooking.getLengthOfStay());
             bookingDTO.setBookingId(availableBooking.getBookingId());
-            bookingDTO.setType(retreiveRoom.get().getType());
-            bookingDTO.setAvailable(retreiveRoom.get().getAvailable());
-            bookingDTO.setGuestCapacity(retreiveRoom.get().getGuestCapacity());
+            bookingDTO.setType(newRoom.getType());
+            bookingDTO.setTotalPrice(newBooking.getTotalPrice());
+            //Room information
+            bookingDTO.setRoomId(newRoom.getRoomId());
+            bookingDTO.setAvailable(newRoom.getAvailable());
+            bookingDTO.setGuestCapacity(newRoom.getGuestCapacity());
 
             return bookingDTO;
         }

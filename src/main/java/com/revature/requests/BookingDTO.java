@@ -22,10 +22,12 @@ public class BookingDTO {
     private RoomsType type;
     private int guestCapacity;
     private int available;
+    private Double totalPrice;
 //    private Payment payment;
 
 
-//    private Integer lengthOfStay;
+    private Integer lengthOfStay;
+    private Integer roomId;
 //    private Date checkInDate;
 //    private Date checkOutDate;
 }
