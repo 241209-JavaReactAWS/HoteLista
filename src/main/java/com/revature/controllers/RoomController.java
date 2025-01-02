@@ -25,22 +25,20 @@ public class RoomController {
     // TODO Create a Room
     @PostMapping("/createRoom")
     public ResponseEntity<Room> createRoomHandler(@RequestBody Room room){
-       return ResponseEntity.status(200).body(roomServices.createRoom(room));
+        Room roomCreated = roomServices.createRoom(room);
+       return ResponseEntity.status(201).body(roomCreated);
     }
     // TODO Get Room by ID
     @GetMapping("{roomID}")
     public ResponseEntity<Room> getRoomByIdHandler(@PathVariable int roomID){
         Optional<Room> possibleRoom = Optional.ofNullable(roomServices.getRoomById(roomID));
-        if(possibleRoom.isEmpty()){
-            return ResponseEntity.status(404).build();
-        }
-        return ResponseEntity.ok(possibleRoom.get());
+        return possibleRoom.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(404).build());
     }
 
     // TODO Get All Rooms
     @GetMapping()
-    public List<Room> getAllRoomsHandler(){
-        return roomServices.getAllRooms();
+    public ResponseEntity<List<Room>> getAllRoomsHandler(){
+        return ResponseEntity.ok(roomServices.getAllRooms());
     }
     // TODO Update Room Information
 
@@ -51,7 +49,7 @@ public class RoomController {
             return ResponseEntity.status(401).build();
         }
         // Check if the user is not the owner
-        if (session.getAttribute("role") != Role.OWNER){
+        if  (!Role.OWNER.equals(session.getAttribute("role"))){
             return ResponseEntity.status(403).build();
         }
         // Check if room ID in body does not match the path variable
@@ -70,7 +68,8 @@ public class RoomController {
     }
 
     // TODO Delete Room
-    //@DeleteMapping("/deleteRoom/{}")
+    @DeleteMapping("{roomId}")
+
 
 
 }
