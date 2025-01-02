@@ -68,7 +68,7 @@ public class RoomController {
     }
 
     // TODO Delete Room
-    @DeleteMapping("{roomId}")
+
 
 
 

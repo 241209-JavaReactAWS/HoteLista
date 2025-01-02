@@ -47,4 +47,6 @@ public class RoomServices {
         actualRoom.setAvailable(room.getAvailable());
         return roomDAO.save(actualRoom);
     }
+
+    //TODO Delete room
 }
