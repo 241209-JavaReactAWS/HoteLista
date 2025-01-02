@@ -39,7 +39,17 @@ public class AccountController {
     public ResponseEntity<Account> registerNewAccountHandler(@RequestBody Account account, @RequestBody Hotel hotel, HttpSession session){
         // TODO: UPDATED session here
         try {
-            Account acc = accountService.registerNewAccount(account, hotel);
+            Account acc;
+            if (account.getRole()) {
+                /* Hotel Owner */
+                session.setAttribute("role", "HotelOwner");
+                acc = accountService.registerNewAccount(account, hotel);
+
+            } else {
+                /* Normal User Account */
+                session.setAttribute("role", "NormalUser");
+                acc = accountService.registerNewAccount(account, null);
+            }
             return ResponseEntity.ok(acc);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -48,7 +58,7 @@ public class AccountController {
     }
 
     /** Login Account handler */
-    @PostMapping("/login")
+    @PostMapping("/users/login")
     public ResponseEntity<Account> loginAccountHandler(@RequestBody Account account, HttpSession session){
         try {
             Account acc = accountService.loginAccount(account);
