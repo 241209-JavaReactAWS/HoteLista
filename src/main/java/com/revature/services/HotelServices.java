@@ -20,11 +20,15 @@ public class HotelServices {
 
     private final HotelDAO hotelDAO;
     private final RoomServices roomServices;
+    private final RoomDAO roomDAO;
+    private final HotelAmenityService hotelAmenityService;
 
     @Autowired
-    public HotelServices(HotelDAO hotelDAO, RoomServices roomServices) {
+    public HotelServices(HotelDAO hotelDAO, RoomServices roomServices, RoomDAO roomDAO, HotelAmenityService hotelAmenityService) {
         this.hotelDAO = hotelDAO;
         this.roomServices = roomServices;
+        this.roomDAO = roomDAO;
+        this.hotelAmenityService = hotelAmenityService;
     }
 
     public Hotel createHotel(Hotel hotel) throws HotelExistException {
@@ -57,10 +61,6 @@ public class HotelServices {
         return hotelDAO.save(hotelToBeUpdated);
     }
 
-    public void deleteHotel(Hotel hotel) {
-        hotelDAO.delete(hotel);
-    }
-
     public Hotel getHotelByName(String hotelName) throws NotFoundHotelException {
         Optional<Hotel> optionalHotel =  hotelDAO.getByHotelName(hotelName);
         if(optionalHotel.isEmpty()){
@@ -81,4 +81,27 @@ public class HotelServices {
                 .collect(Collectors.toSet());
 
     }
+
+  //TODO Delete Hotel
+  public Hotel removeHotel( String hotelName, int hotelId) {
+      // Look the Hotel
+      Optional<Hotel> possibleHotel = hotelDAO.findById(hotelId);
+
+      // Validate that they both exist
+      if (possibleHotel.isEmpty()) {
+          return null;
+      }
+
+      // values that exist
+      Hotel returnedHotel = possibleHotel.get();
+
+      // Delete all rooms associated with the hotel
+      Set<Room> rooms = returnedHotel.getRooms();
+      for (Room room : rooms) {
+          roomDAO.delete(room);
+      }
+
+      // save the hotel
+      return hotelDAO.save(returnedHotel);
+  }
 }
