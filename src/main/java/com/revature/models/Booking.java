@@ -26,8 +26,16 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
-
+    @Enumerated(EnumType.STRING)
+    private BookingStatus status;
     private Integer lengthOfStay;
     private Date checkInDate;
     private Date checkOutDate;
+//    private Payment payment;
+
+//    @OneToOne
+//    @JoinColumn(name = "payment_id")
+//    private Payment payment;
+
+//    add room availability updates automatically after checkout
 }

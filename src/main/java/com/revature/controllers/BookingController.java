@@ -25,10 +25,11 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @PostMapping("/add/{accountId}/{roomId}")
-    public ResponseEntity<BookingDTO> addNewBooking(@PathVariable Integer accountId, @PathVariable Integer roomId){
+    @PostMapping("/add/{accountId}/{roomId}/{paymentId}")
+    public ResponseEntity<BookingDTO> addNewBooking(@PathVariable Integer accountId, @PathVariable Integer roomId, @PathVariable Integer paymentId){
+
         try{
-            BookingDTO newBooking = bookingService.addNewBooking(accountId, roomId);
+            BookingDTO newBooking = bookingService.addNewBooking(accountId, roomId, paymentId);
             return ResponseEntity.status(HttpStatus.CREATED).body(newBooking);
         }catch (Exception e) {
             throw new PaymentNotCreated("BOOKING FAILED");
@@ -36,9 +37,9 @@ public class BookingController {
     }
 
     @GetMapping("/fetchAllBooking/{accountId}")
-    public ResponseEntity<List<Booking>> fetchAlBooking(@PathVariable Integer accountId){
+    public ResponseEntity<List<BookingDTO>> fetchAlBooking(@PathVariable Integer accountId){
         try{
-            List<Booking> bookingList = bookingService.fetchAllBookingList(accountId);
+            List<BookingDTO> bookingList = bookingService.fetchAllBookingList(accountId);
             return ResponseEntity.status(HttpStatus.OK).body(bookingList);
         } catch (Exception e) {
             throw new PaymentNotFound("No LIST OF BOOKINGS FOUND");

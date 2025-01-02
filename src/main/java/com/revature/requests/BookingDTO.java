@@ -1,6 +1,7 @@
 package com.revature.requests;
 
 import com.revature.models.Account;
+import com.revature.models.Payment;
 import com.revature.models.Room;
 import com.revature.models.RoomsType;
 import jakarta.persistence.*;
@@ -21,6 +22,7 @@ public class BookingDTO {
     private RoomsType type;
     private int guestCapacity;
     private int available;
+//    private Payment payment;
 
 
 //    private Integer lengthOfStay;

@@ -5,6 +5,7 @@ import com.revature.daos.PaymentDAO;
 import com.revature.exceptions.payment.PaymentNotFound;
 import com.revature.models.Account;
 import com.revature.models.Payment;
+import com.revature.models.Room;
 import com.revature.requests.PaymentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,10 +28,7 @@ public class PaymentService {
         this.accountService = accountService;
     }
 
-    /** TODO:
-     *  Get All By account Id
-     *
-     * */
+
 
     public PaymentDTO addPayment(Payment payment, Integer accountId) throws Exception {
         Account account = accountService.searchById(accountId);
@@ -76,7 +74,7 @@ public class PaymentService {
         if(newList.isEmpty()){
             throw new PaymentNotFound("NO LIST OF PAYMENTS FOUND");
         } else {
-            for (Payment item: listOfAllPaymentMethods){
+            for (Payment item: newList){
 
                 PaymentDTO convertClass = new PaymentDTO();
                 convertClass.setPaymentId(item.getPaymentId());
@@ -90,5 +88,22 @@ public class PaymentService {
             return resultList;
         }
     }
+
+//    public Payment checkoutPayment(Account account, Integer paymentId) {
+//        Payment sumbitedPayment = new Payment();
+//        Optional<Payment>retreivePayment=paymentDAO.findById(paymentId);
+//        if(retreivePayment.isEmpty()){
+//            throw new PaymentNotFound("NO LIST OF PAYMENTS FOUND");
+//        }else{
+//             sumbitedPayment.setAccount(account);
+//             sumbitedPayment.setCvv(retreivePayment.get().getCvv());
+//             sumbitedPayment.setCardHolderName(retreivePayment.get().getCardHolderName());
+//             sumbitedPayment.setCardNumber(retreivePayment.get().getCardNumber());
+//             sumbitedPayment.setPostalCode(retreivePayment.get().getPostalCode());
+//             Payment approvedPayment = paymentDAO.save(sumbitedPayment);
+//
+//            return approvedPayment;
+//        }
+//    }
 }
 
