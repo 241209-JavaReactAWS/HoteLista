@@ -1,6 +1,8 @@
 package com.revature.controllers;
 
 import com.revature.daos.BookingDAO;
+import com.revature.exceptions.booking.BookingNotCreated;
+import com.revature.exceptions.booking.BookingNotFound;
 import com.revature.exceptions.payment.PaymentNotCreated;
 import com.revature.exceptions.payment.PaymentNotFound;
 import com.revature.models.Booking;
@@ -32,7 +34,7 @@ public class BookingController {
             BookingDTO newBooking = bookingService.addNewBooking(accountId, roomId, paymentId);
             return ResponseEntity.status(HttpStatus.CREATED).body(newBooking);
         }catch (Exception e) {
-            throw new PaymentNotCreated("BOOKING FAILED");
+            throw new BookingNotCreated("BOOKING FAILED");
         }
     }
 
@@ -42,16 +44,25 @@ public class BookingController {
             List<BookingDTO> bookingList = bookingService.fetchAllBookingList(accountId);
             return ResponseEntity.status(HttpStatus.OK).body(bookingList);
         } catch (Exception e) {
-            throw new PaymentNotFound("No LIST OF BOOKINGS FOUND");
+            throw new BookingNotFound("No LIST OF BOOKINGS FOUND");
         }
     }
-    @GetMapping("/fetchById/{accountId}")
-    public ResponseEntity<BookingDTO> fetchBookingById(@PathVariable Integer accountId) {
+    @GetMapping("/fetchById/{accountId}/{bookingId}")
+    public ResponseEntity<Booking> fetchBookingById(@PathVariable Integer accountId,@PathVariable Integer bookingId) {
         try {
-            BookingDTO fetchedBooking = bookingService.fetchById(accountId);
+            Booking fetchedBooking = bookingService.fetchById(accountId,bookingId);
             return ResponseEntity.status(HttpStatus.OK).body(fetchedBooking);
         } catch (Exception e) {
-            throw new PaymentNotFound("NO Booking Found");
+            throw new BookingNotFound("NO Booking Found");
+        }
+    }
+    @PatchMapping("/update/{accountId}/{bookingId}")
+    public ResponseEntity<Booking> updateBooking(@RequestBody Booking booking,@PathVariable Integer accountId, @PathVariable Integer bookingId) {
+        try {
+            Booking updatedBooking = bookingService.fetchById(accountId, bookingId);
+            return ResponseEntity.status(HttpStatus.OK).body(updatedBooking);
+        } catch (Exception e) {
+            throw new BookingNotFound("NO Booking Found");
         }
     }
 }

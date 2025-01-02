@@ -3,6 +3,8 @@ package com.revature.services;
 import com.revature.daos.BookingDAO;
 import com.revature.daos.PaymentDAO;
 import com.revature.daos.RoomDAO;
+import com.revature.exceptions.booking.BookingNotCreated;
+import com.revature.exceptions.booking.BookingNotFound;
 import com.revature.exceptions.payment.PaymentNotFound;
 import com.revature.models.*;
 import com.revature.requests.BookingDTO;
@@ -36,7 +38,7 @@ public class BookingService {
                 .filter(item -> item.getAccount().getAccountId()==accountId)
                 .toList();
         if(filteredList.isEmpty()){
-            throw new PaymentNotFound("NO LIST OF BOOKINGS FOUND");
+            throw new BookingNotFound("NO LIST OF BOOKINGS FOUND");
         }else {
             for (Booking item: filteredList){
                 BookingDTO bookingToDTO = new BookingDTO();
@@ -57,7 +59,7 @@ public BookingDTO addNewBooking(Integer accountId, Integer roomId,Integer paymen
 //        Payment checkoutProcess = paymentService.checkoutPayment(account,paymentId);
         Optional<Payment> checkoutProcess = paymentDAO.findById(paymentId);
         if (checkoutProcess.isEmpty()) {
-            throw new PaymentNotFound("PAYMENT FAILED");
+            throw new BookingNotCreated("PAYMENT FAILED");
         } else {
             Booking newBooking = new Booking();
             newBooking.setRoom(retreiveRoom.get());
@@ -79,12 +81,51 @@ public BookingDTO addNewBooking(Integer accountId, Integer roomId,Integer paymen
             return bookingDTO;
         }
     }
-    public BookingDTO fetchById(Integer accountId) {
-        return null;
+    public Booking fetchById(Integer accountId , Integer bookingId) throws Exception {
+        Booking findBooking = new Booking();
+        Account account = accountService.searchById(accountId);
+        Optional<Booking> retreiveBooking = bookingDAO.findById(bookingId);
+        if(retreiveBooking.isEmpty()){
+            throw new BookingNotFound("BOOKING NOT FOUND");
+        }else{
+            findBooking.setAccount(retreiveBooking.get().getAccount());
+            findBooking.setRoom(retreiveBooking.get().getRoom());
+            findBooking.setStatus(retreiveBooking.get().getStatus());
+//            findBooking.setCheckInDate(retreiveBooking.get().getCheckInDate());
+//            findBooking.setLengthOfStay(retreiveBooking.get().getLengthOfStay());
+            return findBooking;
+        }
+    }
+    public Booking fetchById(Booking booking , Integer accountId , Integer bookingId) throws Exception {
+        Booking updateBooking = new Booking();
+        Room updateRoom = new Room();
+        Account account = accountService.searchById(accountId);
+        Optional<Booking> retreiveBooking = bookingDAO.findById(bookingId);
+        if (retreiveBooking.isEmpty()){
+            throw new BookingNotFound("BOOKING NOT FOUND");
+        }else{
+            updateBooking.setAccount(retreiveBooking.get().getAccount());
+            updateBooking.setRoom(retreiveBooking.get().getRoom());
+            updateBooking.setStatus(BookingStatus.CANCELED);
+            updateBooking.setLengthOfStay(retreiveBooking.get().getLengthOfStay());
+            updateBooking.setBookingId(retreiveBooking.get().getBookingId());
+
+            updateBooking=bookingDAO.save(retreiveBooking.get());
+
+            updateRoom.setRoomId(retreiveBooking.get().getRoom().getRoomId());
+            updateRoom.setBookings(null);
+            updateRoom.setAvailable(1);
+            updateRoom.setGuestCapacity(retreiveBooking.get().getRoom().getGuestCapacity());
+            updateRoom.setType(retreiveBooking.get().getRoom().getType());
+            roomDAO.save(updateRoom);
+            return updateBooking;
+
+        }
     }
 
+
     /** TODO:
-     * Add Booking
+     *
      * Update Booking - incase of canceled
 
      *
