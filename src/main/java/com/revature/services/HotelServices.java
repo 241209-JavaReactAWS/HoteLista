@@ -2,6 +2,7 @@ package com.revature.services;
 
 import com.revature.daos.HotelDAO;
 import com.revature.daos.RoomDAO;
+import com.revature.exceptions.hotel.HotelExistException;
 import com.revature.exceptions.hotel.NotFoundHotelException;
 import com.revature.models.Hotel;
 import com.revature.models.Room;
@@ -26,8 +27,11 @@ public class HotelServices {
         this.roomServices = roomServices;
     }
 
-    public Hotel createHotel(Hotel hotel) {
+    public Hotel createHotel(Hotel hotel) throws HotelExistException {
         //TODO: Check hotel exists
+        if(hotelDAO.findById(hotel.getHotelId()).isPresent()){
+            throw new HotelExistException("Hotel Already Exist!");
+        }
         return hotelDAO.save(hotel);
     }
 
@@ -45,8 +49,11 @@ public class HotelServices {
     }
 
 
-    public Hotel updateHotelInfo(Hotel hotelToBeUpdated) {
-        // TODO: Check if hotel exists
+    public Hotel updateHotelInfo(Hotel hotelToBeUpdated) throws NotFoundHotelException {
+
+        if(hotelDAO.findById(hotelToBeUpdated.getHotelId()).isPresent()){
+            throw new NotFoundHotelException("Hotel Already Exist");
+        }
         return hotelDAO.save(hotelToBeUpdated);
     }
 

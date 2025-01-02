@@ -18,6 +18,9 @@ public class RoomServices {
 
     public Room createRoom(Room room) {
         // TODO: Check if room exists (if it exists it should be an update instead)
+        if(roomDAO.findById(room.getRoomId()).isPresent()){
+            throw new NotFoundRoomException("Room already exist");
+        }
         return roomDAO.save(room);
     }
 
@@ -36,7 +39,7 @@ public class RoomServices {
     public Room updateRoom(Room room) {
         Optional<Room> possibleRoom = roomDAO.findById(room.getRoomId());
         if(possibleRoom.isEmpty()){
-            throw new NotFoundRoomException("");
+            throw new NotFoundRoomException("Room Does not Exist!");
         }
         Room actualRoom = possibleRoom.get();
         actualRoom.setGuestCapacity(room.getGuestCapacity());
