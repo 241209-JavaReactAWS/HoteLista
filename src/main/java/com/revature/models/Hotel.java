@@ -17,6 +17,7 @@ public class Hotel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int hotelId;
 
+    /* Contains owner account */
     @OneToOne
     @JoinColumn(name = "account_id")
     private Account account;

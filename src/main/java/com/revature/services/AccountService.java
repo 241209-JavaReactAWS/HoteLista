@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import com.revature.daos.AccountDAO;
@@ -24,28 +25,28 @@ public class AccountService {
 
     // TODO: Create specific exceptions
     /** Register a new User Account 
-         * @throws Exception */
-        public Account registerNewAccount(Account account, Hotel hotel) throws Exception {
+         * @throws DuplicateKeyException */
+    public Account registerNewAccount(Account account, Hotel hotel) throws DuplicateKeyException {
         Optional<Account> acc = accountDAO.findById(account.getAccountId());
         if (acc.isPresent()) {
-            throw new Exception("This account already exists. Please register with new information");
+            throw new DuplicateKeyException("This account already exists. Please register with new information");
         }
         /** boolean isOwner evaluates to true, meaning a hotel owner is trying to register */
         if (acc.get().getRole()) {
             /** Register the hotel owner and save the new hotel to hotel table, modify if hotel already exists */
+            hotel.setAccount(account);
             hotelDAO.save(hotel);
         }
         // TODO: ONEtoONE between owner and HOTEL
-
         return accountDAO.save(account);
     }
 
     /** Login a User Account 
-         * @throws Exception */
-        public Account loginAccount(Account account) throws Exception {
+         * @throws NullPointerException */
+    public Account loginAccount(Account account) throws NullPointerException {
         Optional<Account> acc = accountDAO.findByEmailAndPassword(account.getEmail(), account.getPassword());
         if (acc.isEmpty()) {
-            throw new Exception("Account not found. Please enter valid credentials.");
+            throw new NullPointerException("Account not found. Please enter valid credentials.");
         }
         return acc.get();
     }
@@ -56,21 +57,21 @@ public class AccountService {
     }
 
     /** Look up (Filter/Search) Accounts by accountId 
-         * @throws Exception */
-        public Account searchById(int accountId) throws Exception {
+         * @throws NullPointerException */
+    public Account searchById(int accountId) throws NullPointerException {
         Optional<Account> acc = accountDAO.findById(accountId);
         if (acc.isEmpty()) {
-            throw new Exception("User with this ID not found");
+            throw new NullPointerException("User with this ID not found");
         }
         return acc.get();
     }
 
     /** Look up (Filter/Search) Accounts by email 
-         * @throws Exception */
-        public Account searchByEmail(String email) throws Exception {
+         * @throws NullPointerException */
+    public Account searchByEmail(String email) throws NullPointerException {
         Optional<Account> acc = accountDAO.findByEmail(email);
         if (acc.isEmpty()) {
-            throw new Exception("User with this Email Address not found");
+            throw new NullPointerException("User with this Email Address not found");
         }
         return acc.get();
     }
@@ -81,18 +82,20 @@ public class AccountService {
     }
 
     /** Delete Account by accountId 
-         * @throws Exception */
-    public void deleteById(int accountId) throws Exception {
+         * @throws IllegalArgumentException */
+    public void deleteById(int accountId) throws IllegalArgumentException {
+        if (accountId < 0)
+            throw new IllegalArgumentException("Please enter a valid account ID.");
         accountDAO.deleteById(accountId);
     }
 
     /** Edit a User Account 
-         * @throws Exception */
-        public Account editAccount(Account account) throws Exception {
-            Optional<Account> acc = accountDAO.findById(account.getAccountId());
-            if (acc.isEmpty()) {
-                throw new Exception("Account not found. Please try again");
-            }
-            return accountDAO.save(account);
+         * @throws NullPointerException */
+    public Account editAccount(Account account) throws NullPointerException {
+        Optional<Account> acc = accountDAO.findById(account.getAccountId());
+        if (acc.isEmpty()) {
+            throw new NullPointerException("Account not found. Please try again");
         }
+        return accountDAO.save(account);
+    }
 }

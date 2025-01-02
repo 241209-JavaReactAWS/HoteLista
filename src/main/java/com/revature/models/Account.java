@@ -32,7 +32,11 @@ public class Account {
     @JsonIgnoreProperties("account")
     private List<Payment> paymentsList;
 
-    public boolean getRole(){ return isOwner; }
-    public void setRole(boolean isOwner){ this.isOwner = isOwner; }
+    public boolean getRole() { 
+        return isOwner; 
+    }
+    public void setRole(boolean isOwner) { 
+        this.isOwner = isOwner; 
+    }
 
 }
