@@ -10,6 +10,7 @@ import com.revature.models.Payment;
 import com.revature.requests.BookingDTO;
 import com.revature.requests.FindBookingDTO;
 import com.revature.requests.PaymentDTO;
+import com.revature.requests.UpdateBookingDTO;
 import com.revature.services.BookingService;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,9 +63,9 @@ public class BookingController {
     }
 
     @PatchMapping("/update/{accountId}/{bookingId}")
-    public ResponseEntity<Booking> updateBooking(@RequestBody Booking booking,@PathVariable Integer accountId, @PathVariable Integer bookingId) {
+    public ResponseEntity<UpdateBookingDTO> updateBooking(@PathVariable Integer accountId, @PathVariable Integer bookingId) {
         try {
-            Booking updatedBooking = bookingService.updateBooking(booking, accountId, bookingId);
+            UpdateBookingDTO updatedBooking = bookingService.updateBooking(accountId, bookingId);
             return ResponseEntity.status(HttpStatus.OK).body(updatedBooking);
         } catch (Exception e) {
             throw new BookingNotFound("NO Booking Found");

@@ -133,32 +133,44 @@ public class BookingService {
         }
     }
 
-    public UpdateBookingDTO updateBooking(Booking booking , Integer accountId , Integer bookingId) throws Exception {
+    public UpdateBookingDTO updateBooking(Integer accountId , Integer bookingId) throws Exception {
         Booking updateBooking = new Booking();
         Room updateRoom = new Room();
+        //Finding account information
         Account account = accountService.searchById(accountId);
+        //Finding booking information
         Optional<Booking> retreiveBooking = bookingDAO.findById(bookingId);
         if (retreiveBooking.isEmpty()){
             throw new BookingNotFound("BOOKING NOT FOUND");
         }else{
-            updateBooking.setAccount(retreiveBooking.get().getAccount());
+
+            //Updating booking
+            updateBooking.setAccount(account);
             updateBooking.setRoom(retreiveBooking.get().getRoom());
             updateBooking.setStatus(BookingStatus.CANCELED);
-            updateBooking.setLengthOfStay(retreiveBooking.get().getLengthOfStay());
+            updateBooking.setLengthOfStay(0);
             updateBooking.setBookingId(retreiveBooking.get().getBookingId());
+            updateBooking.setTotalPrice(0.00);
+            Booking updatedResult = bookingDAO.save(updateBooking);
 
-            updateBooking = bookingDAO.save(retreiveBooking.get());
-
+            //Updating Room
             updateRoom.setRoomId(retreiveBooking.get().getRoom().getRoomId());
             updateRoom.setBookings(null);
             updateRoom.setAvailable(1);
             updateRoom.setGuestCapacity(retreiveBooking.get().getRoom().getGuestCapacity());
             updateRoom.setType(retreiveBooking.get().getRoom().getType());
-            roomDAO.save(updateRoom);
+            Room updatedRoomResult = roomDAO.save(updateRoom);
 
+            //Using a DTO to hid unnessary information
             UpdateBookingDTO updatedBookingResult = new UpdateBookingDTO();
-            updatedBookingResult.getBookingId();
+            updatedBookingResult.setBookingId(updateBooking.getBookingId());
+            updatedBookingResult.setStatus(updateBooking.getStatus());
+            updatedBookingResult.setTotalPrice(updateBooking.getTotalPrice());
+            updatedBookingResult.setLengthOfStay(updateBooking.getLengthOfStay());
+            updatedBookingResult.setType(updatedRoomResult.getType());
+            updatedBookingResult.setAvailable(updatedRoomResult.getAvailable());
 
+            return  updatedBookingResult;
 
         }
     }
