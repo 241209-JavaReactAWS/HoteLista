@@ -53,19 +53,19 @@ public class BookingController {
     }
 
     @GetMapping("/fetchById/{accountId}/{bookingId}")
-    public ResponseEntity<Booking> fetchBookingById(@PathVariable Integer accountId,@PathVariable Integer bookingId) {
+    public ResponseEntity<FindBookingDTO> fetchBookingById(@PathVariable Integer accountId,@PathVariable Integer bookingId) {
         try {
-            Booking fetchedBooking = bookingService.fetchById(accountId,bookingId);
+            FindBookingDTO fetchedBooking = bookingService.fetchById(accountId,bookingId);
             return ResponseEntity.status(HttpStatus.OK).body(fetchedBooking);
         } catch (Exception e) {
             throw new BookingNotFound("NO Booking Found");
         }
     }
 
-    @PatchMapping("/update/{accountId}/{bookingId}")
-    public ResponseEntity<UpdateBookingDTO> updateBooking(@PathVariable Integer accountId, @PathVariable Integer bookingId) {
+    @PatchMapping("/cancel/{accountId}/{bookingId}")
+    public ResponseEntity<UpdateBookingDTO> cancelBooking(@PathVariable Integer accountId, @PathVariable Integer bookingId) {
         try {
-            UpdateBookingDTO updatedBooking = bookingService.updateBooking(accountId, bookingId);
+            UpdateBookingDTO updatedBooking = bookingService.cancelBooking(accountId, bookingId);
             return ResponseEntity.status(HttpStatus.OK).body(updatedBooking);
         } catch (Exception e) {
             throw new BookingNotFound("NO Booking Found");

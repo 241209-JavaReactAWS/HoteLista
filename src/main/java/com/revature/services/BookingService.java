@@ -56,18 +56,21 @@ public class BookingService {
         List<FindBookingDTO> allBookings = new ArrayList<>();
         Account account = accountService.searchById(accountId);
         List<Booking> bookingList = bookingDAO.findAll();
+        //Filter out bookingList by account id
         List<Booking> filteredList = bookingList.stream()
                 .filter(item -> item.getAccount().getAccountId()==accountId)
                 .toList();
         if(filteredList.isEmpty()){
             throw new BookingNotFound("NO LIST OF BOOKINGS FOUND");
         } else {
+            //Convert Booking list to DTO List
             for (Booking item: filteredList){
                 FindBookingDTO findBookingDTO = new FindBookingDTO();
                 findBookingDTO.setBookingId(item.getBookingId());
                 findBookingDTO.setStatus(item.getStatus());
                 findBookingDTO.setTotalPrice(item.getTotalPrice());
                 findBookingDTO.setLengthOfStay(item.getLengthOfStay());
+                findBookingDTO.setPaymentId(item.getPayment().getPaymentId());
                 allBookings.add(findBookingDTO);
             }
             return allBookings;
@@ -129,22 +132,35 @@ public class BookingService {
         }
     }
 
-    public Booking fetchById(Integer accountId , Integer bookingId) throws Exception {
+    public FindBookingDTO fetchById(Integer accountId , Integer bookingId) throws Exception {
         Booking findBooking = new Booking();
         Account account = accountService.searchById(accountId);
         Optional<Booking> retreiveBooking = bookingDAO.findById(bookingId);
         if(retreiveBooking.isEmpty()){
             throw new BookingNotFound("BOOKING NOT FOUND");
-        }else{
+        } else {
+            //Creating an booking object and populating the data
+            findBooking.setBookingId(retreiveBooking.get().getBookingId());
             findBooking.setAccount(retreiveBooking.get().getAccount());
             findBooking.setRoom(retreiveBooking.get().getRoom());
+            findBooking.setTotalPrice(retreiveBooking.get().getTotalPrice());
             findBooking.setStatus(retreiveBooking.get().getStatus());
+            findBooking.setLengthOfStay(retreiveBooking.get().getLengthOfStay());
+            findBooking.setPayment(retreiveBooking.get().getPayment());
 
-            return findBooking;
+            //Converting Booking object to DTO
+            FindBookingDTO convertToDTO = new FindBookingDTO();
+            convertToDTO.setBookingId(retreiveBooking.get().getBookingId());
+            convertToDTO.setTotalPrice(retreiveBooking.get().getTotalPrice());
+            convertToDTO.setStatus(retreiveBooking.get().getStatus());
+            convertToDTO.setLengthOfStay(retreiveBooking.get().getLengthOfStay());
+            convertToDTO.setPaymentId(retreiveBooking.get().getPayment().getPaymentId());
+
+            return convertToDTO;
         }
     }
 
-    public UpdateBookingDTO updateBooking(Integer accountId , Integer bookingId) throws Exception {
+    public UpdateBookingDTO cancelBooking(Integer accountId , Integer bookingId) throws Exception {
         Booking updateBooking = new Booking();
         Room updateRoom = new Room();
         //Finding account information

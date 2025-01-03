@@ -17,4 +17,5 @@ public class FindBookingDTO {
     private BookingStatus status;
     private Double totalPrice;
     private Integer lengthOfStay;
+    private Integer paymentId;
 }
