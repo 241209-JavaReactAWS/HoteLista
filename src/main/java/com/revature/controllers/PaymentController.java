@@ -56,12 +56,5 @@ public class PaymentController {
             throw new PaymentNotFound("NO LIST OF PAYMENTS FOUND");
         }
     }
-
-
-
-
-
-
-
 }
 

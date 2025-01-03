@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "bookings")
@@ -23,10 +24,23 @@ public class Booking {
     @JoinColumn(name = "account_id")
     private Account account;
 
+//    @ManyToOne
+//    @JoinColumn(name = "room_id")
+//    private Room room;
+
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
 
-    private Date checkInDate;
-    private Date checkOutDate;
+    @Enumerated(EnumType.STRING)
+    private BookingStatus status;
+    private Double totalPrice;
+    private Integer lengthOfStay;
+//    private Date checkInDate;
+//    private Date checkOutDate;
+
+    @ManyToOne
+    @JoinColumn(name = "payment_id")
+    Payment payment;
+
 }
