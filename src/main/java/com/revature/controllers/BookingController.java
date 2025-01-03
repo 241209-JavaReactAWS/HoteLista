@@ -8,6 +8,7 @@ import com.revature.exceptions.payment.PaymentNotFound;
 import com.revature.models.Booking;
 import com.revature.models.Payment;
 import com.revature.requests.BookingDTO;
+import com.revature.requests.FindBookingDTO;
 import com.revature.requests.PaymentDTO;
 import com.revature.services.BookingService;
 import jakarta.websocket.server.PathParam;
@@ -21,7 +22,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/booking")
 public class BookingController {
+
     private final BookingService bookingService;
+
     @Autowired
     public BookingController(BookingService bookingService) {
         this.bookingService = bookingService;
@@ -39,14 +42,15 @@ public class BookingController {
     }
 
     @GetMapping("/fetchAllBooking/{accountId}")
-    public ResponseEntity<List<BookingDTO>> fetchAlBooking(@PathVariable Integer accountId){
+    public ResponseEntity<List<FindBookingDTO>> fetchAlBooking(@PathVariable Integer accountId){
         try{
-            List<BookingDTO> bookingList = bookingService.fetchAllBookingList(accountId);
+            List<FindBookingDTO> bookingList = bookingService.fetchAllBookingList(accountId);
             return ResponseEntity.status(HttpStatus.OK).body(bookingList);
         } catch (Exception e) {
             throw new BookingNotFound("No LIST OF BOOKINGS FOUND");
         }
     }
+
     @GetMapping("/fetchById/{accountId}/{bookingId}")
     public ResponseEntity<Booking> fetchBookingById(@PathVariable Integer accountId,@PathVariable Integer bookingId) {
         try {
@@ -56,10 +60,11 @@ public class BookingController {
             throw new BookingNotFound("NO Booking Found");
         }
     }
+
     @PatchMapping("/update/{accountId}/{bookingId}")
     public ResponseEntity<Booking> updateBooking(@RequestBody Booking booking,@PathVariable Integer accountId, @PathVariable Integer bookingId) {
         try {
-            Booking updatedBooking = bookingService.fetchById(accountId, bookingId);
+            Booking updatedBooking = bookingService.updateBooking(booking, accountId, bookingId);
             return ResponseEntity.status(HttpStatus.OK).body(updatedBooking);
         } catch (Exception e) {
             throw new BookingNotFound("NO Booking Found");
