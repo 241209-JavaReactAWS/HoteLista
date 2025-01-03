@@ -72,15 +72,14 @@ public class RoomController {
         return ResponseEntity.status(200).body(updatedRoom);
     }
 
-
     @DeleteMapping("/roomDelete/{roomId}")
-    public  ResponseEntity<Hotel> deleteRoomFromHotelHandler(HttpSession session, @PathVariable int roomId){
-        if(session.isNew() || session.getAttribute("hotelName") == null){
+    public ResponseEntity<Hotel> deleteRoomFromHotelHandler(HttpSession session, @PathVariable int roomId) {
+        if (session.isNew() || session.getAttribute("hotelName") == null) {
             return ResponseEntity.status(401).build();
         }
         Hotel returnedHotel = roomServices.removeRoomFromHotel((String) session.getAttribute("hotelName"), roomId);
 
-        if(returnedHotel == null){
+        if (returnedHotel == null) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(returnedHotel);

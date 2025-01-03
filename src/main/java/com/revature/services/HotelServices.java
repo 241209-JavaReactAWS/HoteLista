@@ -24,7 +24,8 @@ public class HotelServices {
     private final HotelAmenityService hotelAmenityService;
 
     @Autowired
-    public HotelServices(HotelDAO hotelDAO, RoomServices roomServices, RoomDAO roomDAO, HotelAmenityService hotelAmenityService) {
+    public HotelServices(HotelDAO hotelDAO, RoomServices roomServices, RoomDAO roomDAO,
+            HotelAmenityService hotelAmenityService) {
         this.hotelDAO = hotelDAO;
         this.roomServices = roomServices;
         this.roomDAO = roomDAO;
@@ -32,16 +33,16 @@ public class HotelServices {
     }
 
     public Hotel createHotel(Hotel hotel) throws HotelExistException {
-        //TODO: Check hotel exists
-        if(hotelDAO.findById(hotel.getHotelId()).isPresent()){
+        // TODO: Check hotel exists
+        if (hotelDAO.findById(hotel.getHotelId()).isPresent()) {
             throw new HotelExistException("Hotel Already Exist!");
         }
         return hotelDAO.save(hotel);
     }
 
     public Hotel findHotelByID(int id) throws NotFoundHotelException {
-        Optional<Hotel> optionalHotel =  hotelDAO.findById(id);
-        if(optionalHotel.isEmpty()){
+        Optional<Hotel> optionalHotel = hotelDAO.findById(id);
+        if (optionalHotel.isEmpty()) {
             throw new NotFoundHotelException("");
         }
         return optionalHotel.get();
@@ -52,18 +53,17 @@ public class HotelServices {
         return new HashSet<Hotel>(potentialHotels);
     }
 
-
     public Hotel updateHotelInfo(Hotel hotelToBeUpdated) throws NotFoundHotelException {
 
-        if(hotelDAO.findById(hotelToBeUpdated.getHotelId()).isPresent()){
+        if (hotelDAO.findById(hotelToBeUpdated.getHotelId()).isPresent()) {
             throw new NotFoundHotelException("Hotel Already Exist");
         }
         return hotelDAO.save(hotelToBeUpdated);
     }
 
     public Hotel getHotelByName(String hotelName) throws NotFoundHotelException {
-        Optional<Hotel> optionalHotel =  hotelDAO.getByHotelName(hotelName);
-        if(optionalHotel.isEmpty()){
+        Optional<Hotel> optionalHotel = hotelDAO.getByHotelName(hotelName);
+        if (optionalHotel.isEmpty()) {
             throw new NotFoundHotelException("");
         }
         return optionalHotel.get();
@@ -82,26 +82,44 @@ public class HotelServices {
 
     }
 
-  //TODO Delete Hotel
-  public Hotel removeHotel( String hotelName, int hotelId) {
-      // Look the Hotel
-      Optional<Hotel> possibleHotel = hotelDAO.findById(hotelId);
+    // TODO Delete Hotel
+    public Hotel removeHotel(String hotelName, int hotelId) {
+        // Look the Hotel
+        Optional<Hotel> possibleHotel = hotelDAO.findById(hotelId);
 
-      // Validate that they both exist
-      if (possibleHotel.isEmpty()) {
-          return null;
-      }
+        // Validate that they both exist
+        if (possibleHotel.isEmpty()) {
+            return null;
+        }
 
-      // values that exist
-      Hotel returnedHotel = possibleHotel.get();
+        // values that exist
+        Hotel returnedHotel = possibleHotel.get();
 
-      // Delete all rooms associated with the hotel
-      Set<Room> rooms = returnedHotel.getRooms();
-      for (Room room : rooms) {
-          roomDAO.delete(room);
-      }
+        // Delete all rooms associated with the hotel
+        Set<Room> rooms = returnedHotel.getRooms();
+        for (Room room : rooms) {
+            roomDAO.delete(room);
+        }
 
-      // save the hotel
-      return hotelDAO.save(returnedHotel);
-  }
+        // save the hotel
+        return hotelDAO.save(returnedHotel);
+    }
+
+    public List<Hotel> searchHotels(String name, Set<String> amenities) {
+        // If name and amenities are not provided return all hotels
+        if (name == null && (amenities == null || amenities.isEmpty())) {
+            return hotelDAO.findAll();
+        }
+        // FILTER HOTEL BY NAME IF PROVIDED
+        if (name != null && (amenities != null || !amenities.isEmpty())) {
+            // search by both name and amenities
+            return hotelDAO.findByNameAndAmenities(name, amenities);
+        } else if (name != null) {
+            // search by name only
+            return hotelDAO.findByName(name);
+        } else {
+            // search by amenities
+            return hotelDAO.findByAmenities(amenities);
+        }
+    }
 }
