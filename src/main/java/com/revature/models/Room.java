@@ -17,6 +17,10 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int roomId;
+    private int guestCapacity;
+    private int available;
+    @Enumerated(EnumType.STRING)
+    private RoomsType type;
 
     @ManyToOne
     @JoinColumn(name = "hotel_id")
@@ -25,12 +29,6 @@ public class Room {
     @OneToMany(mappedBy = "room")
     @JsonIgnoreProperties("room")
     private List<Booking> bookings;
-
-    @Enumerated(EnumType.STRING)
-    private RoomsType type;
-
-    private int guestCapacity;
-    private int available;
 }
 
 

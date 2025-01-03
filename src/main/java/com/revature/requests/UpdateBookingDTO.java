@@ -19,8 +19,4 @@ public class UpdateBookingDTO {
     private Integer lengthOfStay;
     private RoomsType type;
     private int available;
-
-
-
-
 }

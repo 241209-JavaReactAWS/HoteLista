@@ -23,5 +23,4 @@ public class BookingDTO {
     private String cardHolderName;
     private String cardNumber;
 
-
 }

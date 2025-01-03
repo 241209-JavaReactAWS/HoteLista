@@ -24,19 +24,19 @@ public class BookingService {
         private final AccountService accountService;
         private final BookingDAO bookingDAO;
         private final RoomDAO roomDAO;
-        private final PaymentService paymentService;
 
     @Autowired
-    public BookingService(PaymentDAO paymentDAO, AccountService accountService, BookingDAO bookingDAO, RoomDAO roomDAO, PaymentService paymentService) {
+    public BookingService(PaymentDAO paymentDAO, AccountService accountService, BookingDAO bookingDAO, RoomDAO roomDAO) {
         this.paymentDAO = paymentDAO;
         this.accountService = accountService;
         this.bookingDAO = bookingDAO;
         this.roomDAO = roomDAO;
-        this.paymentService = paymentService;
     }
 
     public Double roomPricing(RoomsType roomsType){
         Double price = 0.00;
+
+        //Checking the price based on type
         if(roomsType.equals(RoomsType.SUITE)){
             price = 200.00;
             return price;
@@ -75,21 +75,21 @@ public class BookingService {
     }
 
     public BookingDTO addNewBooking(Booking booking, Integer accountId, Integer roomId,Integer paymentId) throws Exception {
-
+        //Find account by id
         Account account = accountService.searchById(accountId);
+        //Find room by id
         Optional<Room> retreiveRoom = roomDAO.findById(roomId);
-        Optional<Payment> checkoutProcess = paymentDAO.findById(paymentId);
-        if (checkoutProcess.isEmpty()) {
+        //Finding payment by id
+        Optional<Payment> retrievedPayment = paymentDAO.findById(paymentId);
+
+        if (retrievedPayment.isEmpty()) {
             throw new BookingNotCreated("PAYMENT FAILED");
         } else {
-            Booking newBooking = new Booking();
-            newBooking.setAccount(account);
-            newBooking.setStatus(BookingStatus.COMPLETE_PAYMENT);
-            newBooking.setLengthOfStay(booking.getLengthOfStay());
-            newBooking.setPayment(checkoutProcess.get());
-            Double price = this.roomPricing(retreiveRoom.get().getType());
-            newBooking.setTotalPrice(price);
 
+            //Calling roomPricing method to get pricing for room by type
+            Double price = this.roomPricing(retreiveRoom.get().getType());
+
+            //Updating the room to show that it is reserved
             Room newRoom = new Room();
             newRoom.setGuestCapacity(retreiveRoom.get().getGuestCapacity());
             newRoom.setRoomId(retreiveRoom.get().getRoomId());
@@ -97,22 +97,33 @@ public class BookingService {
             newRoom.setType(retreiveRoom.get().getType());
             newRoom.setAvailable(0);
 
+            //Creating a new booking
+            Booking newBooking = new Booking();
+            newBooking.setAccount(account);
+            newBooking.setStatus(BookingStatus.COMPLETE_PAYMENT);
+            newBooking.setLengthOfStay(booking.getLengthOfStay());
+            newBooking.setPayment(retrievedPayment.get());
+            newBooking.setTotalPrice(price);
             newBooking.setRoom(newRoom);
 
-            roomDAO.save(newRoom);
-            List<Booking> setBookingVar = new ArrayList<>();
-            setBookingVar.add(newBooking);
-            newRoom.setBookings(setBookingVar);
-            Booking availableBooking = bookingDAO.save(newBooking);
+            //Converting single booking to a list to format into setter for room
+            List<Booking> setBookingToList = new ArrayList<>();
+            setBookingToList.add(newBooking);
+            newRoom.setBookings(setBookingToList);
 
+            //Saving new room and booking
+            Room savedRoom = roomDAO.save(newRoom);
+            Booking savedBooking = bookingDAO.save(newBooking);
+
+            //Converting model to DTO
             BookingDTO bookingDTO = new BookingDTO();
-            bookingDTO.setBookingId(availableBooking.getBookingId());
-            bookingDTO.setStatus(availableBooking.getStatus());
-            bookingDTO.setTotalPrice(availableBooking.getTotalPrice());
-            bookingDTO.setLengthOfStay(availableBooking.getLengthOfStay());
-            bookingDTO.setType(newRoom.getType());
-            bookingDTO.setCardHolderName(checkoutProcess.get().getCardHolderName());
-            bookingDTO.setCardNumber(checkoutProcess.get().getCardNumber());
+            bookingDTO.setBookingId(savedBooking.getBookingId());
+            bookingDTO.setStatus(savedBooking.getStatus());
+            bookingDTO.setTotalPrice(savedBooking.getTotalPrice());
+            bookingDTO.setLengthOfStay(savedBooking.getLengthOfStay());
+            bookingDTO.setType(savedRoom.getType());
+            bookingDTO.setCardHolderName(retrievedPayment.get().getCardHolderName());
+            bookingDTO.setCardNumber(retrievedPayment.get().getCardNumber());
 
             return bookingDTO;
         }
@@ -176,12 +187,4 @@ public class BookingService {
     }
 
 
-    /** TODO:
-     *
-     * Update Booking - incase of canceled
-
-     *
-     * Stretch Have it automatically check out if the check outdate has pass
-     *
-     * */
 }

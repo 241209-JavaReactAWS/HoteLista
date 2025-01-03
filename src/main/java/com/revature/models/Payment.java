@@ -31,7 +31,6 @@ public class Payment {
     private Integer cvv;
     @Column(nullable = false)
     private String postalCode;
-//    default method
 
     @ManyToOne
     @JoinColumn(name = "account_id")
